@@ -38,4 +38,17 @@ public class CDITeamManager {
         }
         return null;
     }
+
+    public int position(CDITeam team) {
+        int position = 1;
+        for (CDITeam cdiTeam : teams) {
+            if (cdiTeam.getMoney() > team.getMoney() && !cdiTeam.getName().equals("adminTeam") && !cdiTeam.getName().equals("modTeam")) {
+                position++;
+            }
+        }
+        if(team.getName().equals("adminTeam") || team.getName().equals("modTeam")) {
+            return 0;
+        }
+        return position;
+    }
 }

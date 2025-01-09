@@ -44,19 +44,41 @@ public class TeamSyncSQL {
         }
     }
 
-        public static void updateAllTeamsToDB() {
+//    public static void updateAllTeamsToDB() {
+//        for(CDITeam cdiTeam : CDILandPlugin.instance().teamManager().getTeams()) {
+//            try {
+//                Connection connection = DatabaseManager.MAIN_DB.getDatabaseAccess().getConnection();
+//                long money = cdiTeam.getMoney();
+//                int supportPoints = cdiTeam.getSupportPoints();
+//                int slots = cdiTeam.getSlots();
+//                PreparedStatement preparedStatement = connection.prepareStatement("UPDATE TEAM SET golds = ?, supportPoints = ?, Slots = ? WHERE name = ?");
+//                preparedStatement.setLong(1, money);
+//                preparedStatement.setInt(2, supportPoints);
+//                preparedStatement.setInt(3, slots);
+//                preparedStatement.setString(4, cdiTeam.getName());
+//                preparedStatement.executeUpdate();
+//                connection.close();
+//            } catch (SQLException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
+//    }
+
+    public static void updateAllTeamsFromDB() {
         for(CDITeam cdiTeam : CDILandPlugin.instance().teamManager().getTeams()) {
             try {
                 Connection connection = DatabaseManager.MAIN_DB.getDatabaseAccess().getConnection();
-                long money = cdiTeam.getMoney();
-                int supportPoints = cdiTeam.getSupportPoints();
-                int slots = cdiTeam.getSlots();
-                PreparedStatement preparedStatement = connection.prepareStatement("UPDATE TEAM SET golds = ?, supportPoints = ?, Slots = ? WHERE name = ?");
-                preparedStatement.setLong(1, money);
-                preparedStatement.setInt(2, supportPoints);
-                preparedStatement.setInt(3, slots);
-                preparedStatement.setString(4, cdiTeam.getName());
-                preparedStatement.executeUpdate();
+                PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM TEAM WHERE name = ?");
+                preparedStatement.setString(1, cdiTeam.getName());
+                ResultSet resultSet = preparedStatement.executeQuery();
+                if (resultSet.next()) {
+                    long money = resultSet.getLong("golds");
+                    int supportPoints = resultSet.getInt("supportPoints");
+                    int slots = resultSet.getInt("Slots");
+                    cdiTeam.setMoney(money);
+                    cdiTeam.setSupportPoints(supportPoints);
+                    cdiTeam.setSlots(slots);
+                }
                 connection.close();
             } catch (SQLException e) {
                 throw new RuntimeException(e);

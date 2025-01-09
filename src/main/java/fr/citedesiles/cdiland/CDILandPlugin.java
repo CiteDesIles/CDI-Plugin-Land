@@ -1,22 +1,52 @@
 package fr.citedesiles.cdiland;
 
+import fr.citedesiles.cdiland.listener.OnJoinListener;
+import fr.citedesiles.cdiland.mysql.CheckTable;
+import fr.citedesiles.cdiland.mysql.DatabaseManager;
+import fr.citedesiles.cdiland.mysql.TeamSyncSQL;
+import fr.citedesiles.cdiland.objects.CDIPlayerManager;
 import fr.citedesiles.cdiland.objects.CDITeamManager;
+import fr.citedesiles.cdiland.runnable.ScoreboardRunnable;
+import fr.citedesiles.cdiland.runnable.TeamSyncRunnable;
 import fr.citedesiles.cdiland.utils.ConfigManager;
+import fr.citedesiles.cdiland.utils.ScoreboardTeamManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.IOException;
 
 public class CDILandPlugin extends JavaPlugin {
     private static CDILandPlugin instance;
     private ConfigManager configManager;
     private CDITeamManager teamManager;
+    private CDIPlayerManager playerManager;
 
     @Override
     public void onEnable() {
         instance = this;
         configManager = new ConfigManager(this);
         teamManager = new CDITeamManager(this);
+        playerManager = new CDIPlayerManager(this);
         getLogger().info("CDILand plugin enabled");
 
+        try {
+            configManager.loadConfig();
+        } catch (IOException e) {
+            getLogger().severe("An error occurred while loading config.yml");
+        }
 
+        getServer().getPluginManager().registerEvents(new OnJoinListener(this), this);
+
+        DatabaseManager.initAllDataBaseConnections();
+        CheckTable.checkTables();
+        TeamSyncSQL.getAllTeamsFromDB(this);
+        ScoreboardTeamManager scoreboardTeamManager = new ScoreboardTeamManager(this);
+        scoreboardTeamManager.initAllTeams();
+
+        TeamSyncRunnable teamSyncRunnable = new TeamSyncRunnable();
+        teamSyncRunnable.runTaskTimerAsynchronously(this, 0, 20 * 5);
+
+        ScoreboardRunnable scoreboardRunnable = new ScoreboardRunnable();
+        scoreboardRunnable.runTaskTimer(this, 0, 20 * 5);
     }
 
     @Override
@@ -34,5 +64,9 @@ public class CDILandPlugin extends JavaPlugin {
 
     public CDITeamManager teamManager() {
         return teamManager;
+    }
+
+    public CDIPlayerManager playerManager() {
+        return playerManager;
     }
 }
