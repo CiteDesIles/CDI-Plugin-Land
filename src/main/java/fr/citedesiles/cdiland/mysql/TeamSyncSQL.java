@@ -1,6 +1,7 @@
 package fr.citedesiles.cdiland.mysql;
 
 import fr.citedesiles.cdiland.CDILandPlugin;
+import fr.citedesiles.cdiland.objects.CDITeam;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -44,7 +45,7 @@ public class TeamSyncSQL {
     }
 
         public static void updateAllTeamsToDB() {
-        for(CDITeam cdiTeam : PluginCite.instance().teamManager().getTeams()) {
+        for(CDITeam cdiTeam : CDILandPlugin.instance().teamManager().getTeams()) {
             try {
                 Connection connection = DatabaseManager.MAIN_DB.getDatabaseAccess().getConnection();
                 long money = cdiTeam.getMoney();
