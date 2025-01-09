@@ -1,0 +1,7 @@
+name: CDILand
+main: fr.citedesiles.cdiland.CDILandPlugin
+version: 1.0
+author: Azrotho
+depend:
+  - FancyNpcs
+  - FancyHolograms
