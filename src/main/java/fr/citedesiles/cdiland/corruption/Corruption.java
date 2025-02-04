@@ -3,14 +3,12 @@ package fr.citedesiles.cdiland.corruption;
 import fr.citedesiles.cdiland.CDILandPlugin;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Zombie;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -72,6 +70,7 @@ public class Corruption {
                 }
             }
         }
+        this.radius = 10;
     }
 
     public void tick() {
@@ -83,6 +82,17 @@ public class Corruption {
         for(int i = 0; i < corruptionBlockPerTick; i++) {
             corruptBlock();
         }
+        updateRadius();
+    }
+
+    public void updateRadius() {
+        int distance = 0;
+        for(CorruptionBlock corruptionBlock : corruptionBlocks) {
+            if(corruptionBlock.getLocation().distance(center) > distance) {
+                distance = (int) corruptionBlock.getLocation().distance(center);
+            }
+        }
+        this.radius = distance -2;
     }
 
     private void corruptBlock() {
@@ -184,10 +194,4 @@ public class Corruption {
         }
         return count;
     }
-
-
-
-
-
-
 }
