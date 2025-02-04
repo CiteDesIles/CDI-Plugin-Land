@@ -1,5 +1,6 @@
 package fr.citedesiles.cdiland.corruption;
 
+import fr.citedesiles.cdiland.CDILandPlugin;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -19,6 +20,7 @@ public class Corruption {
     private List<CorruptionBlock> corruptionBlocks;
 
     private int currentTickToNextBlock = 0;
+    private int removeBlockPerTick = 100;
 
 
     public Corruption(Location center, int speed) {
@@ -26,6 +28,25 @@ public class Corruption {
         this.speed = speed;
         this.corruptionBlocks = new ArrayList<>();
         this.center = center;
+    }
+
+    public void spawnHeart() {
+        // Sphère en obsidienne de 3 de rayons --> Coeur de la corruption
+        for(int x = -3; x <= 3; x++) {
+            for(int y = -3; y <= 3; y++) {
+                for(int z = -3; z <= 3; z++) {
+                    Location location = center.clone().add(x, y, z);
+                    if(location.distance(center) <= 3) {
+                        Block block = location.getBlock();
+                        if(block.getType() != Material.AIR) {
+                            CorruptionBlock corruptionBlock = new CorruptionBlock(block.getType(), location);
+                            corruptionBlocks.add(corruptionBlock);
+                            block.setType(CORRUPTED_BLOCK);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public void tick() {
@@ -73,8 +94,12 @@ public class Corruption {
                 if(block == null) {
                     continue;
                 }
-                if(block.getType() != Material.AIR && !block.getType().toString().contains("SCULK")) {
-                    return block;
+                if(block.getType() != Material.AIR &&
+                    !block.getType().toString().contains("SCULK") &&
+                    !block.getType().toString().contains("BEDROCK") &&
+                    !block.getType().toString().contains("OBSIDIAN"))
+                {
+                        return block;
                 }
             }
         }
@@ -87,6 +112,24 @@ public class Corruption {
 
     public Boolean isInCorruption(Location location) {
         return (location.distance(center) <= radius);
+    }
+
+    public void removeCorruption() {
+        CDILandPlugin.instance().getServer().getScheduler().runTaskTimer(CDILandPlugin.instance(), (task) -> {
+            if(corruptionBlocks.isEmpty()) {
+                task.cancel();
+            }
+            int count = 0;
+            List<CorruptionBlock> corruptionBlocks1 = new ArrayList<>(corruptionBlocks);
+            Collections.shuffle(corruptionBlocks1);
+            for(CorruptionBlock corruptionBlock : corruptionBlocks1) {
+                if(removeBlockPerTick > count) {
+                    corruptionBlocks.remove(corruptionBlock);
+                    corruptionBlock.getLocation().getBlock().setType(corruptionBlock.getAncientBlock());
+                    count++;
+                }
+            }
+        }, 0, 5);
     }
 
 
