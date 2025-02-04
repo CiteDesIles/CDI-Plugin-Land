@@ -1,5 +1,6 @@
 package fr.citedesiles.cdiland;
 
+import fr.citedesiles.cdiland.commands.AdminCommand;
 import fr.citedesiles.cdiland.corruption.CorruptionManager;
 import fr.citedesiles.cdiland.listener.OnJoinListener;
 import fr.citedesiles.cdiland.mysql.CheckTable;
@@ -53,6 +54,8 @@ public class CDILandPlugin extends JavaPlugin {
 
         CorruptionRunnable corruptionRunnable = new CorruptionRunnable();
         corruptionRunnable.runTaskTimer(this, 0, 0);
+
+        getCommand("admin").setExecutor(new AdminCommand());
     }
 
     @Override

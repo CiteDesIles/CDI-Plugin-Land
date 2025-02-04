@@ -187,7 +187,7 @@ public class Corruption {
 
     public int countEntitiesInCorruption() {
         int count = 0;
-        for(Entity entity : center.getWorld().getNearbyEntities(center, radius, radius, radius)) {
+        for(Entity entity : center.getWorld().getNearbyEntities(center, radius+10, radius+10, radius+10)) {
             if(entity instanceof Zombie || entity instanceof Skeleton) {
                 count++;
             }

@@ -5,3 +5,7 @@ author: Azrotho
 depend:
   - FancyNpcs
   - FancyHolograms
+commands:
+  admin:
+    description: Admin command
+    usage: /admin
