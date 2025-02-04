@@ -11,4 +11,20 @@ public class CorruptionBlock {
         this.ancientBlock = ancientBlock;
         this.location = location;
     }
+
+    public Material getAncientBlock() {
+        return ancientBlock;
+    }
+
+    public void setAncientBlock(Material ancientBlock) {
+        this.ancientBlock = ancientBlock;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
 }
