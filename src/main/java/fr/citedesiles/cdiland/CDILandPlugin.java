@@ -7,6 +7,7 @@ import fr.citedesiles.cdiland.mysql.DatabaseManager;
 import fr.citedesiles.cdiland.mysql.TeamSyncSQL;
 import fr.citedesiles.cdiland.objects.CDIPlayerManager;
 import fr.citedesiles.cdiland.objects.CDITeamManager;
+import fr.citedesiles.cdiland.runnable.CorruptionRunnable;
 import fr.citedesiles.cdiland.runnable.ScoreboardRunnable;
 import fr.citedesiles.cdiland.runnable.TeamSyncRunnable;
 import fr.citedesiles.cdiland.utils.ConfigManager;
@@ -49,6 +50,9 @@ public class CDILandPlugin extends JavaPlugin {
 
         ScoreboardRunnable scoreboardRunnable = new ScoreboardRunnable();
         scoreboardRunnable.runTaskTimer(this, 0, 20 * 5);
+
+        CorruptionRunnable corruptionRunnable = new CorruptionRunnable();
+        corruptionRunnable.runTaskTimer(this, 0, 0);
     }
 
     @Override
