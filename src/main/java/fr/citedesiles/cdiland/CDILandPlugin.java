@@ -1,5 +1,6 @@
 package fr.citedesiles.cdiland;
 
+import fr.citedesiles.cdiland.corruption.CorruptionManager;
 import fr.citedesiles.cdiland.listener.OnJoinListener;
 import fr.citedesiles.cdiland.mysql.CheckTable;
 import fr.citedesiles.cdiland.mysql.DatabaseManager;
@@ -19,6 +20,7 @@ public class CDILandPlugin extends JavaPlugin {
     private ConfigManager configManager;
     private CDITeamManager teamManager;
     private CDIPlayerManager playerManager;
+    private CorruptionManager corruptionManager;
 
     @Override
     public void onEnable() {
@@ -68,5 +70,9 @@ public class CDILandPlugin extends JavaPlugin {
 
     public CDIPlayerManager playerManager() {
         return playerManager;
+    }
+
+    public CorruptionManager corruptionManager() {
+        return corruptionManager;
     }
 }
