@@ -3,7 +3,11 @@ package fr.citedesiles.cdiland.corruption;
 import fr.citedesiles.cdiland.CDILandPlugin;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Skeleton;
+import org.bukkit.entity.Zombie;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,13 +25,17 @@ public class Corruption {
 
     private int currentTickToNextBlock = 0;
     private int removeBlockPerTick = 100;
+    private int corruptionBlockPerTick = 100;
+    private int maxEntities = 100;
 
+    String id;
 
-    public Corruption(Location center, int speed) {
+    public Corruption(String id, Location center, int speed) {
         this.radius = 0;
         this.speed = speed;
         this.corruptionBlocks = new ArrayList<>();
         this.center = center;
+        this.id = id;
     }
 
     public void spawnHeart() {
@@ -47,6 +55,23 @@ public class Corruption {
                 }
             }
         }
+
+        // Corrompre les blocks dans un rayon de 8 blocks
+        for(int x = -8; x <= 8; x++) {
+            for(int y = -8; y <= 8; y++) {
+                for(int z = -8; z <= 8; z++) {
+                    Location location = center.clone().add(x, y, z);
+                    if(location.distance(center) <= 8) {
+                        Block block = location.getBlock();
+                        if(block.getType() != Material.AIR) {
+                            CorruptionBlock corruptionBlock = new CorruptionBlock(block.getType(), location);
+                            corruptionBlocks.add(corruptionBlock);
+                            block.setType(CORRUPTED_BLOCK);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public void tick() {
@@ -54,7 +79,25 @@ public class Corruption {
             currentTickToNextBlock++;
             return;
         }
-        // TODO: Implement this.
+        currentTickToNextBlock = 0;
+        for(int i = 0; i < corruptionBlockPerTick; i++) {
+            corruptBlock();
+        }
+    }
+
+    private void corruptBlock() {
+        Block block = getBlockNearARandomCorruptedBlock();
+        if(block != null) {
+            CorruptionBlock corruptionBlock = new CorruptionBlock(block.getType(), block.getLocation());
+            corruptionBlocks.add(corruptionBlock);
+            block.setType(CORRUPTED_BLOCK);
+        }
+    }
+
+    private void corruptBlock(Block block) {
+        CorruptionBlock corruptionBlock = new CorruptionBlock(block.getType(), block.getLocation());
+        corruptionBlocks.add(corruptionBlock);
+        block.setType(CORRUPTED_BLOCK);
     }
 
     public Block getBlockNearARandomCorruptedBlock() {
@@ -130,6 +173,16 @@ public class Corruption {
                 }
             }
         }, 0, 5);
+    }
+
+    public int countEntitiesInCorruption() {
+        int count = 0;
+        for(Entity entity : center.getWorld().getNearbyEntities(center, radius, radius, radius)) {
+            if(entity instanceof Zombie || entity instanceof Skeleton) {
+                count++;
+            }
+        }
+        return count;
     }
 
 
