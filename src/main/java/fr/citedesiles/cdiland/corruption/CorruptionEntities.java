@@ -1,4 +1,4 @@
 package fr.citedesiles.cdiland.corruption;
 
-public class CorruptionSpawners {
+public class CorruptionEntities {
 }
