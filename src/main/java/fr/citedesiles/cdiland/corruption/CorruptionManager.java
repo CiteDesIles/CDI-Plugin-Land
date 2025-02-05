@@ -20,4 +20,21 @@ public class CorruptionManager {
         corruption.spawnHeart();
         corruptions.add(corruption);
     }
+
+    public Corruption getCorruption(String id) {
+        for(Corruption corruption : corruptions) {
+            if(corruption.getId().equals(id)) {
+                return corruption;
+            }
+        }
+        return null;
+    }
+
+    public void stopCorruption(String id) {
+        Corruption corruption = getCorruption(id);
+        if(corruption != null) {
+            corruption.removeCorruption();
+            corruptions.remove(corruption);
+        }
+    }
 }

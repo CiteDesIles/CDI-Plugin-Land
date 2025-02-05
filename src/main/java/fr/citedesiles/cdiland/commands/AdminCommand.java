@@ -18,6 +18,9 @@ public class AdminCommand implements CommandExecutor {
             case "startCorrupt":
                 CDILandPlugin.instance().corruptionManager().createCorruption("test", ((Player) commandSender).getLocation(), 10);
                 break;
+            case "stopCorrupt":
+                CDILandPlugin.instance().corruptionManager().stopCorruption("test");
+                break;
         }
         return true;
     }

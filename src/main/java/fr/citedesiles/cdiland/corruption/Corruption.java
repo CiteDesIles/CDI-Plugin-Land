@@ -44,11 +44,7 @@ public class Corruption {
                     Location location = center.clone().add(x, y, z);
                     if(location.distance(center) <= 3) {
                         Block block = location.getBlock();
-                        if(block.getType() != Material.AIR) {
-                            CorruptionBlock corruptionBlock = new CorruptionBlock(block.getType(), location);
-                            corruptionBlocks.add(corruptionBlock);
-                            block.setType(CORRUPTED_BLOCK);
-                        }
+                        block.setType(Material.OBSIDIAN);
                     }
                 }
             }
@@ -61,7 +57,7 @@ public class Corruption {
                     Location location = center.clone().add(x, y, z);
                     if(location.distance(center) <= 8) {
                         Block block = location.getBlock();
-                        if(block.getType() != Material.AIR) {
+                        if(block.getType() != Material.AIR && block.getType() != Material.BEDROCK && block.getType() != Material.OBSIDIAN) {
                             CorruptionBlock corruptionBlock = new CorruptionBlock(block.getType(), location);
                             corruptionBlocks.add(corruptionBlock);
                             block.setType(CORRUPTED_BLOCK);
@@ -83,6 +79,30 @@ public class Corruption {
             corruptBlock();
         }
         updateRadius();
+        double random = (Math.random() * 100);
+        if(random < 10) {
+            spawnMonsters();
+        }
+    }
+
+    public void spawnMonsters() {
+        if(countEntitiesInCorruption() >= maxEntities) {
+            return;
+        }
+        double x = Math.random() * radius * 2 - radius;
+        double z = Math.random() * radius * 2 - radius;
+        int y = center.getWorld().getHighestBlockYAt(center.clone().add(x, 0, z));
+        Location location = center.clone().add(x, y, z);
+        location.setY(y + 1);
+        //if(isInCorruption(location)) {
+        //    if(location.getBlock().getType() == Material.AIR && isBlockOnTopOfWorld(location.getBlock())) {
+                if(Math.random() > 0.5) {
+                    CorruptionEntities.spawnCorruptedZombie(location);
+                } else {
+                    CorruptionEntities.spawnCorruptedSkeleton(location);
+                }
+          //  }
+        //}
     }
 
     public void updateRadius() {
@@ -101,6 +121,18 @@ public class Corruption {
             CorruptionBlock corruptionBlock = new CorruptionBlock(block.getType(), block.getLocation());
             corruptionBlocks.add(corruptionBlock);
             block.setType(CORRUPTED_BLOCK);
+            if(isBlockOnTopOfWorld(block)) {
+                double random = Math.random() * 100;
+                if(random < 10) {
+                    Block blockU = block.getLocation().add(0, 1, 0).getBlock();
+                    blockU.setType(Material.SCULK_SENSOR);
+                }
+                double random2 = Math.random() * 100;
+                if(random < 0.5) {
+                    Block blockD = block.getLocation().add(0, -1, 0).getBlock();
+                    blockD.setType(Material.SCULK_CATALYST);
+                }
+            }
         }
     }
 
@@ -172,14 +204,19 @@ public class Corruption {
             if(corruptionBlocks.isEmpty()) {
                 task.cancel();
             }
-            int count = 0;
-            List<CorruptionBlock> corruptionBlocks1 = new ArrayList<>(corruptionBlocks);
-            Collections.shuffle(corruptionBlocks1);
-            for(CorruptionBlock corruptionBlock : corruptionBlocks1) {
-                if(removeBlockPerTick > count) {
-                    corruptionBlocks.remove(corruptionBlock);
-                    corruptionBlock.getLocation().getBlock().setType(corruptionBlock.getAncientBlock());
-                    count++;
+            for(int i = 0; i < removeBlockPerTick; i++) {
+                if(corruptionBlocks.isEmpty()) {
+                    break;
+                }
+                CorruptionBlock corruptionBlock = corruptionBlocks.get(corruptionBlocks.size()-1);
+                corruptionBlocks.remove(corruptionBlock);
+                corruptionBlock.getLocation().getBlock().setType(corruptionBlock.getAncientBlock());
+                Block blockU = corruptionBlock.getLocation().add(0, 1, 0).getBlock();
+                if(blockU.getType() == Material.SCULK_SENSOR) {
+                    blockU.setType(Material.AIR);
+                }
+                if(blockU.getType() == Material.SCULK_CATALYST) {
+                    blockU.setType(Material.AIR);
                 }
             }
         }, 0, 5);
@@ -187,11 +224,17 @@ public class Corruption {
 
     public int countEntitiesInCorruption() {
         int count = 0;
-        for(Entity entity : center.getWorld().getNearbyEntities(center, radius+10, radius+10, radius+10)) {
-            if(entity instanceof Zombie || entity instanceof Skeleton) {
-                count++;
+        for(Entity entity : center.getWorld().getEntities()) {
+            if(entity.getLocation().distance(center) <= radius) {
+                if (entity instanceof Zombie || entity instanceof Skeleton) {
+                    count++;
+                }
             }
         }
         return count;
+    }
+
+    public String getId() {
+        return id;
     }
 }

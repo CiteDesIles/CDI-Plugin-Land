@@ -6,7 +6,7 @@ import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Zombie;
 
 public class CorruptionEntities {
-    public void spawnCorruptedZombie(Location location) {
+    public static void spawnCorruptedZombie(Location location) {
         Zombie zombie = location.getWorld().spawn(location, Zombie.class);
         zombie.setCustomName("§1§lZombie corrompu");
         zombie.setCustomNameVisible(true);
@@ -15,7 +15,7 @@ public class CorruptionEntities {
         zombie.setHealth(40);
     }
 
-    public void spawnCorruptedSkeleton(Location location) {
+    public static void spawnCorruptedSkeleton(Location location) {
         Skeleton skeleton = location.getWorld().spawn(location, Skeleton.class);
         skeleton.setCustomName("§1§lSquelette corrompu");
         skeleton.setCustomNameVisible(true);

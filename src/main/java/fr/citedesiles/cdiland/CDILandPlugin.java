@@ -30,6 +30,7 @@ public class CDILandPlugin extends JavaPlugin {
         configManager = new ConfigManager(this);
         teamManager = new CDITeamManager(this);
         playerManager = new CDIPlayerManager(this);
+        corruptionManager = new CorruptionManager();
         getLogger().info("CDILand plugin enabled");
 
         try {

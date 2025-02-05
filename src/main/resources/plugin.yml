@@ -2,6 +2,7 @@ name: CDILand
 main: fr.citedesiles.cdiland.CDILandPlugin
 version: 1.0
 author: Azrotho
+api-version: 1.21
 depend:
   - FancyNpcs
   - FancyHolograms
