@@ -6,6 +6,7 @@ import fr.citedesiles.cdiland.listener.OnJoinListener;
 import fr.citedesiles.cdiland.mysql.CheckTable;
 import fr.citedesiles.cdiland.mysql.DatabaseManager;
 import fr.citedesiles.cdiland.mysql.TeamSyncSQL;
+import fr.citedesiles.cdiland.objectif.ObjectifManager;
 import fr.citedesiles.cdiland.objects.CDIPlayerManager;
 import fr.citedesiles.cdiland.objects.CDITeamManager;
 import fr.citedesiles.cdiland.runnable.CorruptionRunnable;
@@ -23,6 +24,7 @@ public class CDILandPlugin extends JavaPlugin {
     private CDITeamManager teamManager;
     private CDIPlayerManager playerManager;
     private CorruptionManager corruptionManager;
+    private ObjectifManager objectifManager;
 
     @Override
     public void onEnable() {
@@ -31,6 +33,7 @@ public class CDILandPlugin extends JavaPlugin {
         teamManager = new CDITeamManager(this);
         playerManager = new CDIPlayerManager(this);
         corruptionManager = new CorruptionManager();
+        objectifManager = new ObjectifManager();
         getLogger().info("CDILand plugin enabled");
 
         try {
@@ -82,5 +85,9 @@ public class CDILandPlugin extends JavaPlugin {
 
     public CorruptionManager corruptionManager() {
         return corruptionManager;
+    }
+
+    public ObjectifManager objectifManager() {
+        return objectifManager;
     }
 }
