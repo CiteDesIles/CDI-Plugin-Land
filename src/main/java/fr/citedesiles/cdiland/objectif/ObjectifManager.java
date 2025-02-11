@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ObjectifManager {
-    List<CDIObjectif> objectifs = new ArrayList<CDIObjectif>();
+    List<CDIObjectif> objectifs = new ArrayList<>();
 
     public ObjectifManager() {
         for(CDITeam team : CDILandPlugin.instance().teamManager().getTeams()) {

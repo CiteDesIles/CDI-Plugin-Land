@@ -34,7 +34,7 @@ public class CDILandPlugin extends JavaPlugin {
         teamManager = new CDITeamManager(this);
         playerManager = new CDIPlayerManager(this);
         corruptionManager = new CorruptionManager();
-        objectifManager = new ObjectifManager();
+
         getLogger().info("CDILand plugin enabled");
 
         try {
@@ -55,15 +55,16 @@ public class CDILandPlugin extends JavaPlugin {
         teamSyncRunnable.runTaskTimerAsynchronously(this, 0, 20 * 5);
 
         SaveObjectifRunnable saveObjectifRunnable = new SaveObjectifRunnable();
-        saveObjectifRunnable.runTaskTimerAsynchronously(this, 0, 20 * 20);
+        saveObjectifRunnable.runTaskTimerAsynchronously(this, 0, 20 * 5);
 
         ScoreboardRunnable scoreboardRunnable = new ScoreboardRunnable();
-        scoreboardRunnable.runTaskTimer(this, 0, 20 * 5);
+        scoreboardRunnable.runTaskTimer(this, 0, 20 * 60);
 
         CorruptionRunnable corruptionRunnable = new CorruptionRunnable();
         corruptionRunnable.runTaskTimer(this, 0, 0);
 
         getCommand("admin").setExecutor(new AdminCommand());
+        objectifManager = new ObjectifManager();
     }
 
     @Override

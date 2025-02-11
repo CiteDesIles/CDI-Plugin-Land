@@ -16,9 +16,9 @@ public class SyncObjectifSQL {
             // Column team, objectif, value
             try {
                 Connection connection = DatabaseManager.MAIN_DB.getDatabaseAccess().getConnection();
-                ResultSet resultSet = connection.createStatement().executeQuery("SELECT * FROM objectifs WHERE objectif = '" + cdiObjectif.getName() + "' AND team = '" + cdiObjectif.getTeamName() + "'");
+                ResultSet resultSet = connection.createStatement().executeQuery("SELECT * FROM OBJECTIF WHERE objectif = '" + cdiObjectif.getName() + "' AND team = '" + cdiObjectif.getTeamName() + "'");
                 if(!resultSet.next()) {
-                    connection.createStatement().executeUpdate("INSERT INTO objectifs (team, objectif, value) VALUES ('" + cdiObjectif.getTeamName() + "', '" + cdiObjectif.getName() + "', " + cdiObjectif.getValue() + ")");
+                    connection.createStatement().executeUpdate("INSERT INTO OBJECTIF (team, objectif, value) VALUES ('" + cdiObjectif.getTeamName() + "', '" + cdiObjectif.getName() + "', " + cdiObjectif.getValue() + ")");
                 }
                 connection.close();
             } catch (SQLException e) {
@@ -29,7 +29,7 @@ public class SyncObjectifSQL {
                 // Add value to the value in DB
                 try {
                     Connection connection = DatabaseManager.MAIN_DB.getDatabaseAccess().getConnection();
-                    connection.createStatement().executeUpdate("UPDATE objectifs SET value = value + " + cdiObjectif.getValue() + " WHERE objectif = '" + cdiObjectif.getName() + "' AND team = '" + cdiObjectif.getTeamName() + "'");
+                    connection.createStatement().executeUpdate("UPDATE OBJECTIF SET value = value + " + cdiObjectif.getValue() + " WHERE objectif = '" + cdiObjectif.getName() + "' AND team = '" + cdiObjectif.getTeamName() + "'");
                     connection.close();
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
@@ -39,14 +39,23 @@ public class SyncObjectifSQL {
             if(cdiObjectif instanceof CDIObjectifTransactionCheck) {
                 // If value var is superior to value in DB, set value in DB from value var
                 try {
-                    Connection connection = DatabaseManager.MAIN_DB.getDatabaseAccess().getConnection();
-                    ResultSet resultSet = connection.createStatement().executeQuery("SELECT * FROM objectifs WHERE objectif = '" + cdiObjectif.getName() + "' AND team = '" + cdiObjectif.getTeamName() + "'");
-                    if(resultSet.next()) {
-                        if(cdiObjectif.getValue() > resultSet.getInt("value")) {
-                            connection.createStatement().executeUpdate("UPDATE objectifs SET value = " + cdiObjectif.getValue() + " WHERE objectif = '" + cdiObjectif.getName() + "' AND team = '" + cdiObjectif.getTeamName() + "'");
+                    try (Connection connection = DatabaseManager.MAIN_DB.getDatabaseAccess().getConnection()) {
+                        connection.setAutoCommit(false);
+                        try {
+                            ResultSet resultSet = connection.createStatement().executeQuery("SELECT * FROM OBJECTIF WHERE objectif = '" + cdiObjectif.getName() + "' AND team = '" + cdiObjectif.getTeamName() + "'");
+                            if (resultSet.next()) {
+                                if (cdiObjectif.getValue() > resultSet.getInt("value")) {
+                                    connection.createStatement().executeUpdate("UPDATE OBJECTIF SET value = " + cdiObjectif.getValue() + " WHERE objectif = '" + cdiObjectif.getName() + "' AND team = '" + cdiObjectif.getTeamName() + "'");
+                                }
+                            }
+                            connection.commit();
+                            connection.close();
+                        } catch (SQLException e) {
+                            connection.rollback();
+                            connection.close();
+                            throw e;
                         }
                     }
-                    connection.close();
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
