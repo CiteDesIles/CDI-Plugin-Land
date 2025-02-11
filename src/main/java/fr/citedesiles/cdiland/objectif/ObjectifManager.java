@@ -12,8 +12,8 @@ public class ObjectifManager {
     public ObjectifManager() {
         for(CDITeam team : CDILandPlugin.instance().teamManager().getTeams()) {
             objectifs.add(new CDIObjectifCycleReset("dragon_slayer", team.getName()));
-            objectifs.add(new CDIObjectifTransaction("angel", team.getName()));
-            objectifs.add(new CDIObjectifTransaction("dig", team.getName()));
+            objectifs.add(new CDIObjectifTransactionCheck("angel", team.getName()));
+            objectifs.add(new CDIObjectifTransactionCheck("dig", team.getName()));
             objectifs.add(new CDIObjectifCycleReset("dirt", team.getName()));
             objectifs.add(new CDIObjectifCycleReset("death", team.getName()));
             objectifs.add(new CDIObjectifCycleReset("kill", team.getName()));
@@ -26,5 +26,9 @@ public class ObjectifManager {
             objectifs.add(new CDIObjectifCycleReset("arrow_shoot_on_player", team.getName()));
             objectifs.add(new CDIObjectifCycleReset("axolotl_nlue_killed", team.getName()));
         }
+    }
+
+    public List<CDIObjectif> objectifs() {
+        return new ArrayList<>(objectifs);
     }
 }
