@@ -23,9 +23,9 @@ public class Corruption {
     private List<CorruptionBlock> corruptionBlocks;
 
     private int currentTickToNextBlock = 0;
-    private int removeBlockPerTick = 100;
-    private int corruptionBlockPerTick = 100;
-    private int maxEntities = 100;
+    private final int removeBlockPerTick = 100;
+    private final int corruptionBlockPerTick = 100;
+    private final int maxEntities = 100;
 
     private boolean destroyed = false;
 
