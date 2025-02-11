@@ -1,6 +1,7 @@
 package fr.citedesiles.cdiland.corruption;
 
 import fr.citedesiles.cdiland.CDILandPlugin;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -26,6 +27,8 @@ public class Corruption {
     private int corruptionBlockPerTick = 100;
     private int maxEntities = 100;
 
+    private boolean destroyed = false;
+
     String id;
 
     public Corruption(String id, Location center, int speed) {
@@ -42,7 +45,7 @@ public class Corruption {
             for(int y = -3; y <= 3; y++) {
                 for(int z = -3; z <= 3; z++) {
                     Location location = center.clone().add(x, y, z);
-                    if(location.distance(center) <= 3) {
+                    if(location.distance(center) <= 2) {
                         Block block = location.getBlock();
                         block.setType(Material.OBSIDIAN);
                     }
@@ -82,6 +85,29 @@ public class Corruption {
         double random = (Math.random() * 100);
         if(random < 10) {
             spawnMonsters();
+        }
+
+        int countHeart = 0;
+        for(int x = -3; x <= 3; x++) {
+            for(int y = -3; y <= 3; y++) {
+                for(int z = -3; z <= 3; z++) {
+                    Location location = center.clone().add(x, y, z);
+                    if(location.distance(center) <= 2) {
+                        Block block = location.getBlock();
+                        if(block.getType() == Material.OBSIDIAN) {
+                            countHeart++;
+                        }
+                    }
+                }
+            }
+        }
+        if(countHeart == 0) {
+            if(destroyed) {
+                return;
+            }
+            Bukkit.broadcastMessage("§aLa corruption a été vaincue !");
+            CDILandPlugin.instance().corruptionManager().removeCorruption(this.id);
+            destroyed = true;
         }
     }
 
@@ -123,14 +149,19 @@ public class Corruption {
             block.setType(CORRUPTED_BLOCK);
             if(isBlockOnTopOfWorld(block)) {
                 double random = Math.random() * 100;
-                if(random < 10) {
+                if(random < 0.6) {
                     Block blockU = block.getLocation().add(0, 1, 0).getBlock();
                     blockU.setType(Material.SCULK_SENSOR);
                 }
                 double random2 = Math.random() * 100;
-                if(random < 0.5) {
-                    Block blockD = block.getLocation().add(0, -1, 0).getBlock();
+                if(random < 0.2) {
+                    Block blockD = block.getLocation().add(0, 1, 0).getBlock();
                     blockD.setType(Material.SCULK_CATALYST);
+                }
+                double random3 = Math.random() * 100;
+                if(random < 0.1) {
+                    Block blockN = block.getLocation().add(0, 1, 0).getBlock();
+                    blockN.setType(Material.SCULK_SHRIEKER);
                 }
             }
         }
@@ -202,6 +233,7 @@ public class Corruption {
     public void removeCorruption() {
         CDILandPlugin.instance().getServer().getScheduler().runTaskTimer(CDILandPlugin.instance(), (task) -> {
             if(corruptionBlocks.isEmpty()) {
+                CDILandPlugin.instance().corruptionManager().removeCorruption(id);
                 task.cancel();
             }
             for(int i = 0; i < removeBlockPerTick; i++) {

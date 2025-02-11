@@ -37,4 +37,12 @@ public class CorruptionManager {
             corruptions.remove(corruption);
         }
     }
+
+    public void removeCorruption(String id) {
+        Corruption corruption = getCorruption(id);
+        if(corruption != null) {
+            corruption.removeCorruption();
+            corruptions.remove(corruption);
+        }
+    }
 }
