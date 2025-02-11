@@ -10,6 +10,7 @@ import fr.citedesiles.cdiland.objectif.ObjectifManager;
 import fr.citedesiles.cdiland.objects.CDIPlayerManager;
 import fr.citedesiles.cdiland.objects.CDITeamManager;
 import fr.citedesiles.cdiland.runnable.CorruptionRunnable;
+import fr.citedesiles.cdiland.runnable.SaveObjectifRunnable;
 import fr.citedesiles.cdiland.runnable.ScoreboardRunnable;
 import fr.citedesiles.cdiland.runnable.TeamSyncRunnable;
 import fr.citedesiles.cdiland.utils.ConfigManager;
@@ -52,6 +53,9 @@ public class CDILandPlugin extends JavaPlugin {
 
         TeamSyncRunnable teamSyncRunnable = new TeamSyncRunnable();
         teamSyncRunnable.runTaskTimerAsynchronously(this, 0, 20 * 5);
+
+        SaveObjectifRunnable saveObjectifRunnable = new SaveObjectifRunnable();
+        saveObjectifRunnable.runTaskTimerAsynchronously(this, 0, 20 * 20);
 
         ScoreboardRunnable scoreboardRunnable = new ScoreboardRunnable();
         scoreboardRunnable.runTaskTimer(this, 0, 20 * 5);
