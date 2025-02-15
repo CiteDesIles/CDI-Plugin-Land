@@ -31,4 +31,13 @@ public class ObjectifManager {
     public List<CDIObjectif> objectifs() {
         return new ArrayList<>(objectifs);
     }
+
+    public CDIObjectif get(CDITeam team, String name) {
+        for(CDIObjectif objectif : objectifs) {
+            if(objectif.getName().equals(name) && objectif.getTeamName().equals(team.getName())) {
+                return objectif;
+            }
+        }
+        return null;
+    }
 }
