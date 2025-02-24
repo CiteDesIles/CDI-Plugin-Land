@@ -59,10 +59,10 @@ public class CDILandPlugin extends JavaPlugin {
         teamSyncRunnable.runTaskTimerAsynchronously(this, 0, 20 * 5);
 
         SaveObjectifRunnable saveObjectifRunnable = new SaveObjectifRunnable();
-        saveObjectifRunnable.runTaskTimerAsynchronously(this, 0, 20 * 5);
+        saveObjectifRunnable.runTaskTimerAsynchronously(this, 0, 20 * 20);
 
         ScoreboardRunnable scoreboardRunnable = new ScoreboardRunnable();
-        scoreboardRunnable.runTaskTimer(this, 0, 20 * 60);
+        scoreboardRunnable.runTaskTimer(this, 0, 20 * 5);
 
         CorruptionRunnable corruptionRunnable = new CorruptionRunnable();
         corruptionRunnable.runTaskTimer(this, 0, 0);
