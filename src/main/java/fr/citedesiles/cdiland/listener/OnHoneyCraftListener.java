@@ -26,7 +26,7 @@ public class OnHoneyCraftListener implements Listener {
             if(cdiObjectif == null) {
                 return;
             }
-            cdiObjectif.setValue(cdiObjectif.getValue() + 1);
+            cdiObjectif.setValue(cdiObjectif.getValue() + event.getCurrentItem().getAmount());
         }
     }
 }
