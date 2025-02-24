@@ -55,6 +55,7 @@ public class CDILandPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new OnKillListener(), this);
         getServer().getPluginManager().registerEvents(new OnNetheriteHoeCraftListener(), this);
         getServer().getPluginManager().registerEvents(new OnToolBrokeListener(), this);
+        getServer().getPluginManager().registerEvents(new OnTotemUsedListener(), this);
 
         DatabaseManager.initAllDataBaseConnections();
         CheckTable.checkTables();
