@@ -50,6 +50,7 @@ public class CDILandPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new OnBlueAxolotKilledListener(), this);
         getServer().getPluginManager().registerEvents(new OnDirtMinedListener(), this);
         getServer().getPluginManager().registerEvents(new OnDragonKilledListener(), this);
+        getServer().getPluginManager().registerEvents(new OnEnderpearlShootListener(), this);
 
         DatabaseManager.initAllDataBaseConnections();
         CheckTable.checkTables();
