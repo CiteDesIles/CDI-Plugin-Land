@@ -15,9 +15,6 @@ public class OnWardenKilledListener implements Listener {
     public void on(EntityDeathEvent event) {
         if(event.getEntity().getType().equals(EntityType.WARDEN)) {
             Player player = event.getEntity().getKiller();
-            if(player != null) {
-                return;
-            }
             CDIPlayer cdiPlayer = CDILandPlugin.instance().playerManager().get(player);
             if(cdiPlayer == null) {
                 return;
