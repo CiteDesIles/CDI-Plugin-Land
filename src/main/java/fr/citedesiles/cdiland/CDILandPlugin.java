@@ -2,6 +2,7 @@ package fr.citedesiles.cdiland;
 
 import fr.citedesiles.cdiland.commands.AdminCommand;
 import fr.citedesiles.cdiland.corruption.CorruptionManager;
+import fr.citedesiles.cdiland.listener.OnDeathListener;
 import fr.citedesiles.cdiland.listener.OnJoinListener;
 import fr.citedesiles.cdiland.listener.OnPlayerMoveListener;
 import fr.citedesiles.cdiland.mysql.CheckTable;
@@ -46,6 +47,7 @@ public class CDILandPlugin extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new OnJoinListener(this), this);
         getServer().getPluginManager().registerEvents(new OnPlayerMoveListener(), this);
+        getServer().getPluginManager().registerEvents(new OnDeathListener(), this);
 
         DatabaseManager.initAllDataBaseConnections();
         CheckTable.checkTables();
