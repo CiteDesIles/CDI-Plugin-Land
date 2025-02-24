@@ -4,6 +4,7 @@ import fr.citedesiles.cdiland.CDILandPlugin;
 import fr.citedesiles.cdiland.objectif.CDIObjectif;
 import fr.citedesiles.cdiland.objects.CDIPlayer;
 import fr.citedesiles.cdiland.objects.CDITeam;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -12,7 +13,7 @@ import org.bukkit.event.inventory.CraftItemEvent;
 public class OnHoneyCraftListener implements Listener {
     @EventHandler
     public void on(CraftItemEvent event) {
-        if(event.getRecipe().getResult().getType().equals(org.bukkit.Material.HONEY_BLOCK)) {
+        if(event.getRecipe().getResult().getType().equals(Material.HONEYCOMB_BLOCK)) {
             Player player = (Player) event.getWhoClicked();
             CDIPlayer cdiPlayer = CDILandPlugin.instance().playerManager().get(player);
             if(cdiPlayer == null) {
