@@ -53,6 +53,7 @@ public class CDILandPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new OnEnderpearlShootListener(), this);
         getServer().getPluginManager().registerEvents(new OnHoneyCraftListener(), this);
         getServer().getPluginManager().registerEvents(new OnKillListener(), this);
+        getServer().getPluginManager().registerEvents(new OnNetheriteHoeCraftListener(), this);
 
         DatabaseManager.initAllDataBaseConnections();
         CheckTable.checkTables();
