@@ -15,7 +15,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 public class OnNetheriteHoeCraftListener implements Listener {
     @EventHandler
     public void on(PlayerInteractEvent event) {
-        if(event.getItem().getType().equals(Material.NETHERITE_HOE)) {
+        if(event.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.NETHERITE_HOE)) {
             if(
                 event.getClickedBlock().getType().equals(Material.DIRT) ||
                 event.getClickedBlock().getType().equals(Material.GRASS_BLOCK)
@@ -29,7 +29,7 @@ public class OnNetheriteHoeCraftListener implements Listener {
                 if(team == null) {
                     return;
                 }
-                CDIObjectif cdiObjectif = CDILandPlugin.instance().objectifManager().get(team, "netherite_hoe");
+                CDIObjectif cdiObjectif = CDILandPlugin.instance().objectifManager().get(team, "netherite_houe");
                 if(cdiObjectif == null) {
                     return;
                 }
