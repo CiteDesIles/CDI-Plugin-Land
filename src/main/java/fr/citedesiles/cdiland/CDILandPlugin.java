@@ -2,10 +2,7 @@ package fr.citedesiles.cdiland;
 
 import fr.citedesiles.cdiland.commands.AdminCommand;
 import fr.citedesiles.cdiland.corruption.CorruptionManager;
-import fr.citedesiles.cdiland.listener.OnArrowShootedByAnotherPlayerListener;
-import fr.citedesiles.cdiland.listener.OnDeathListener;
-import fr.citedesiles.cdiland.listener.OnJoinListener;
-import fr.citedesiles.cdiland.listener.OnPlayerMoveListener;
+import fr.citedesiles.cdiland.listener.*;
 import fr.citedesiles.cdiland.mysql.CheckTable;
 import fr.citedesiles.cdiland.mysql.DatabaseManager;
 import fr.citedesiles.cdiland.mysql.TeamSyncSQL;
@@ -50,6 +47,7 @@ public class CDILandPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new OnPlayerMoveListener(), this);
         getServer().getPluginManager().registerEvents(new OnDeathListener(), this);
         getServer().getPluginManager().registerEvents(new OnArrowShootedByAnotherPlayerListener(), this);
+        getServer().getPluginManager().registerEvents(new OnBlueAxolotKilledListener(), this);
 
         DatabaseManager.initAllDataBaseConnections();
         CheckTable.checkTables();
