@@ -70,7 +70,7 @@ public class CDILandPlugin extends JavaPlugin {
         SaveObjectifRunnable saveObjectifRunnable = new SaveObjectifRunnable();
         saveObjectifRunnable.runTaskTimerAsynchronously(this, 0, 20 * 20);
 
-        ScoreboardRunnable scoreboardRunnable = new ScoreboardRunnable();
+        ScoreboardRunnable scoreboardRunnable = new ScoreboardRunnable(this);
         scoreboardRunnable.runTaskTimer(this, 0, 20 * 5);
 
         CorruptionRunnable corruptionRunnable = new CorruptionRunnable();
