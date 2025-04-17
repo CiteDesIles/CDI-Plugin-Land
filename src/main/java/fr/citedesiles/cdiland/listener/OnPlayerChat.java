@@ -13,7 +13,7 @@ import fr.citedesiles.cdiland.utils.DiscordWebhookUtility;
 import io.papermc.paper.event.player.AsyncChatEvent;
 
 public class OnPlayerChat implements Listener {
-        @EventHandler
+    @EventHandler
     public void onPlayerChat(AsyncChatEvent event) {
         CompletableFuture.runAsync(() -> {
             DiscordWebhookUtility discordWebhooksUtility = new DiscordWebhookUtility(CDILandPlugin.instance());

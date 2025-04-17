@@ -13,6 +13,7 @@ import fr.citedesiles.cdiland.objects.CDITeamManager;
 import fr.citedesiles.cdiland.runnable.CorruptionRunnable;
 import fr.citedesiles.cdiland.runnable.SaveObjectifRunnable;
 import fr.citedesiles.cdiland.runnable.ScoreboardRunnable;
+import fr.citedesiles.cdiland.runnable.SpawnProtectionRunnable;
 import fr.citedesiles.cdiland.runnable.TeamSyncRunnable;
 import fr.citedesiles.cdiland.utils.ConfigManager;
 import fr.citedesiles.cdiland.utils.ScoreboardTeamManager;
@@ -82,6 +83,9 @@ public class CDILandPlugin extends JavaPlugin {
 
         CorruptionRunnable corruptionRunnable = new CorruptionRunnable();
         corruptionRunnable.runTaskTimer(this, 0, 0);
+
+        SpawnProtectionRunnable spawnProtectionRunnable = new SpawnProtectionRunnable();
+        spawnProtectionRunnable.runTaskTimer(this, 0, 0);
 
         getCommand("admin").setExecutor(new AdminCommand());
         objectifManager = new ObjectifManager();

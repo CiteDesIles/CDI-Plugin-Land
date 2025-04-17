@@ -22,6 +22,8 @@ public class SpawnProtectionRunnable extends BukkitRunnable {
                     if(player.getLocation().distance(new Location(Bukkit.getWorld("world"), 0, 0, 0)) < 100) {
                         player.setGameMode(GameMode.ADVENTURE);
                         player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§aVous êtes dans le spawn !"));
+                    } else {
+                        player.setGameMode(GameMode.SURVIVAL);
                     }
                 }
             }

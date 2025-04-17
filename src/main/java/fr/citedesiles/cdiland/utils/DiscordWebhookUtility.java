@@ -22,7 +22,7 @@ public class DiscordWebhookUtility {
         }
         Message discordMessage = new Message()
                 .setContent(message)
-                .setUsername(player.getName() + " - SRV Cite");
+                .setUsername(player.getName() + " - SRV Land");
 
         WebhookManager webhookManager = new WebhookManager()
                 .setChannelUrl(url)
