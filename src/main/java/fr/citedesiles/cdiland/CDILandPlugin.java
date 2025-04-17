@@ -45,6 +45,9 @@ public class CDILandPlugin extends JavaPlugin {
         }
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 
+
+        getServer().getPluginManager().registerEvents(new OnPlayerChat(), this);
+        getServer().getPluginManager().registerEvents(new OnLeaveListener(), this);
         getServer().getPluginManager().registerEvents(new OnJoinListener(this), this);
         getServer().getPluginManager().registerEvents(new OnPlayerMoveListener(), this);
         getServer().getPluginManager().registerEvents(new OnDeathListener(), this);
