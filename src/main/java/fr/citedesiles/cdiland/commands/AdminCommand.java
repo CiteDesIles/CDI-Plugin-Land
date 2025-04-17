@@ -1,11 +1,14 @@
 package fr.citedesiles.cdiland.commands;
 
 import fr.citedesiles.cdiland.CDILandPlugin;
+import fr.citedesiles.cdiland.npc.RegisterNPC;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.UUID;
 
 public class AdminCommand implements CommandExecutor {
     @Override
@@ -21,6 +24,8 @@ public class AdminCommand implements CommandExecutor {
             case "stopCorrupt":
                 CDILandPlugin.instance().corruptionManager().stopCorruption("test");
                 break;
+            case "spawnNPC":
+                RegisterNPC.createNPC(((Player) commandSender).getUniqueId(), args[1]);
         }
         return true;
     }

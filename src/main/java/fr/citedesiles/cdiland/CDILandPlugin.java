@@ -6,6 +6,7 @@ import fr.citedesiles.cdiland.listener.*;
 import fr.citedesiles.cdiland.mysql.CheckTable;
 import fr.citedesiles.cdiland.mysql.DatabaseManager;
 import fr.citedesiles.cdiland.mysql.TeamSyncSQL;
+import fr.citedesiles.cdiland.npc.OnNPCInteract;
 import fr.citedesiles.cdiland.objectif.ObjectifManager;
 import fr.citedesiles.cdiland.objects.CDIPlayerManager;
 import fr.citedesiles.cdiland.objects.CDITeamManager;
@@ -42,6 +43,7 @@ public class CDILandPlugin extends JavaPlugin {
         } catch (IOException e) {
             getLogger().severe("An error occurred while loading config.yml");
         }
+        getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 
         getServer().getPluginManager().registerEvents(new OnJoinListener(this), this);
         getServer().getPluginManager().registerEvents(new OnPlayerMoveListener(), this);
@@ -57,6 +59,8 @@ public class CDILandPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new OnToolBrokeListener(), this);
         getServer().getPluginManager().registerEvents(new OnTotemUsedListener(), this);
         getServer().getPluginManager().registerEvents(new OnWardenKilledListener(), this);
+        getServer().getPluginManager().registerEvents(new OnNPCInteract(), this);
+        getServer().getPluginManager().registerEvents(new OnClickInventoryListener(), this);
 
         DatabaseManager.initAllDataBaseConnections();
         CheckTable.checkTables();
