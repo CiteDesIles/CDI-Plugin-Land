@@ -32,7 +32,7 @@ public class OnJoinListener implements Listener {
             if (preparedStatement.executeQuery().next()) {
                 String discordId = preparedStatement.getResultSet().getString("discordID");
                 String team = preparedStatement.getResultSet().getString("team");
-                if(team.equals("none")) {
+                if (team.equals("none")) {
                     event.getPlayer().kickPlayer("Vous n'êtes pas dans une équipe");
                     return;
                 }
@@ -45,6 +45,7 @@ public class OnJoinListener implements Listener {
                 event.getPlayer().kickPlayer("Vous n'êtes pas enregistré dans la base de données");
                 return;
             }
+            connection.close();
         } catch (SQLException e) {
             event.getPlayer().kickPlayer("Erreur de connexion à la base de données");
             e.printStackTrace();
@@ -54,10 +55,10 @@ public class OnJoinListener implements Listener {
         event.setJoinMessage("§7(§a+§7) " + event.getPlayer().getName());
         Player player = event.getPlayer();
         Bukkit.getScoreboardManager().getMainScoreboard().getTeam(plugin.playerManager().get(player).getTeam())
-            .addPlayer(player);
-        if(!player.hasPlayedBefore()) {
+                .addPlayer(player);
+        if (!player.hasPlayedBefore()) {
             player.teleport(
-                new Location(Bukkit.getWorld("world"), 6, 66, 9)
+                    new Location(Bukkit.getWorld("world"), 6, 66, 9)
             );
         }
     }

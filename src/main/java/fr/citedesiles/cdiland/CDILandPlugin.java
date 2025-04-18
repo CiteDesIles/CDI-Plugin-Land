@@ -37,13 +37,14 @@ public class CDILandPlugin extends JavaPlugin {
         playerManager = new CDIPlayerManager(this);
         corruptionManager = new CorruptionManager();
 
-        getLogger().info("CDILand plugin enabled");
-
         try {
             configManager.loadConfig();
         } catch (IOException e) {
             getLogger().severe("An error occurred while loading config.yml");
         }
+
+        DatabaseManager.initAllDataBaseConnections();
+
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 
         getServer().getPluginManager().registerEvents(new OnPlayerRespawnListener(), this);
@@ -66,7 +67,6 @@ public class CDILandPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new OnNPCInteract(), this);
         getServer().getPluginManager().registerEvents(new OnClickInventoryListener(), this);
 
-        DatabaseManager.initAllDataBaseConnections();
         CheckTable.checkTables();
         TeamSyncSQL.getAllTeamsFromDB(this);
         ScoreboardTeamManager scoreboardTeamManager = new ScoreboardTeamManager(this);
@@ -89,10 +89,13 @@ public class CDILandPlugin extends JavaPlugin {
 
         getCommand("admin").setExecutor(new AdminCommand());
         objectifManager = new ObjectifManager();
+
+        getLogger().info("CDILand plugin enabled");
     }
 
     @Override
     public void onDisable() {
+        DatabaseManager.closeAllDataBaseConnections();
         getLogger().info("CDILand plugin disabled");
     }
 
