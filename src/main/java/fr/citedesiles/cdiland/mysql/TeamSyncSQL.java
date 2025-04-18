@@ -32,11 +32,11 @@ public class TeamSyncSQL {
                 PreparedStatement preparedStatementPlayer = connectionPlayer.prepareStatement("SELECT * FROM PLAYER WHERE team = ?");
                 preparedStatementPlayer.setString(1, name);
                 ResultSet resultSetPlayer = preparedStatementPlayer.executeQuery();
-                connectionPlayer.close();
                 while (resultSetPlayer.next()) {
                     UUID uuid = UUID.fromString(resultSetPlayer.getString("uuid"));
                     cdiTeam.getMembers().add(uuid);
                 }
+                connectionPlayer.close();
                 plugin.getLogger().info("Team " + name + " loaded");
             }
             connection.close();
