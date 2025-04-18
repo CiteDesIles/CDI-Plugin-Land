@@ -5,6 +5,7 @@ import fr.citedesiles.cdiland.mysql.DatabaseManager;
 import fr.citedesiles.cdiland.objects.CDIPlayer;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -54,5 +55,10 @@ public class OnJoinListener implements Listener {
         Player player = event.getPlayer();
         Bukkit.getScoreboardManager().getMainScoreboard().getTeam(plugin.playerManager().get(player).getTeam())
             .addPlayer(player);
+        if(!player.hasPlayedBefore()) {
+            player.teleport(
+                new Location(Bukkit.getWorld("world"), 6, 66, 9)
+            );
+        }
     }
 }
