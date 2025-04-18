@@ -17,14 +17,14 @@ public class ObjectifManager {
             objectifs.add(new CDIObjectifCycleReset("dirt", team.getName()));
             objectifs.add(new CDIObjectifCycleReset("death", team.getName()));
             objectifs.add(new CDIObjectifCycleReset("kill", team.getName()));
-            objectifs.add(new CDIObjectifCycleReset("ender_pearl", team.getName()));
+            objectifs.add(new CDIObjectifCycleReset("ender_pearl", team.getName())); // Replaced by fished item count
             objectifs.add(new CDIObjectifCycleReset("netherite_houe", team.getName()));
             objectifs.add(new CDIObjectifCycleReset("totem_of_undying", team.getName()));
             objectifs.add(new CDIObjectifCycleReset("toolbroken", team.getName()));
             objectifs.add(new CDIObjectifCycleReset("wardenkilled", team.getName()));
             objectifs.add(new CDIObjectifCycleReset("honey", team.getName()));
             objectifs.add(new CDIObjectifCycleReset("arrow_shoot_on_player", team.getName()));
-            objectifs.add(new CDIObjectifCycleReset("axolotl_nlue_killed", team.getName()));
+            objectifs.add(new CDIObjectifCycleReset("axolotl_nlue_killed", team.getName())); // Replaced by wither skeleton killed
         }
     }
 
