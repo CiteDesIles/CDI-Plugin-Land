@@ -18,7 +18,7 @@ public class DatabaseAccess {
     private void setupHikari() {
         final HikariConfig config = new HikariConfig();
 
-        config.setMaximumPoolSize(20);
+        config.setMaximumPoolSize(60);
         config.setJdbcUrl(credentials.toURI());
         config.setUsername(credentials.getUsername());
         config.setPassword(credentials.getPassword());
