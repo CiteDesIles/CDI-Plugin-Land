@@ -5,6 +5,7 @@ import fr.citedesiles.cdiland.mysql.DatabaseManager;
 import fr.citedesiles.cdiland.objects.CDIPlayer;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -52,8 +53,13 @@ public class OnJoinListener implements Listener {
             return;
         }
 
-        event.setJoinMessage("§7(§a+§7) " + event.getPlayer().getName());
         Player player = event.getPlayer();
+
+        if (player.getGameMode() == GameMode.SPECTATOR)
+            event.setJoinMessage(null);
+        else
+            event.setJoinMessage("§7(§a+§7) " + event.getPlayer().getName());
+
         Bukkit.getScoreboardManager().getMainScoreboard().getTeam(plugin.playerManager().get(player).getTeam())
                 .addPlayer(player);
         if (!player.hasPlayedBefore()) {
