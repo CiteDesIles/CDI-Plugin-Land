@@ -92,10 +92,10 @@ public class CDILandPlugin extends JavaPlugin {
         getCommand("admin").setExecutor(new AdminCommand());
         objectifManager = new ObjectifManager();
 
-        getLogger().info("CDILand plugin enabled");
-
         CustomCraftUtility customCraftUtility = new CustomCraftUtility();
         customCraftUtility.registerCustomCrafts();
+
+        getLogger().info("CDILand plugin enabled");
     }
 
     @Override
