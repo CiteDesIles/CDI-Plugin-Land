@@ -12,9 +12,6 @@ public class OnLeaveListener implements Listener {
 
         Player player = event.getPlayer();
 
-        if (player.getGameMode() == GameMode.SPECTATOR)
-            event.setQuitMessage(null);
-        else
-            event.setQuitMessage("§7(§c-§7) " + player.getName());
+        if (event.getQuitMessage() != null) event.setQuitMessage("§7(§c-§7) " + player.getName());
     }
 }
