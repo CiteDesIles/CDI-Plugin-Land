@@ -55,10 +55,7 @@ public class OnJoinListener implements Listener {
 
         Player player = event.getPlayer();
 
-        if (player.getGameMode() == GameMode.SPECTATOR)
-            event.setJoinMessage(null);
-        else
-            event.setJoinMessage("§7(§a+§7) " + event.getPlayer().getName());
+        if (event.getJoinMessage() != null) event.setJoinMessage("§7(§a+§7) " + event.getPlayer().getName());
 
         Bukkit.getScoreboardManager().getMainScoreboard().getTeam(plugin.playerManager().get(player).getTeam())
                 .addPlayer(player);
