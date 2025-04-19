@@ -67,6 +67,7 @@ public class CDILandPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new OnWardenKilledListener(), this);
         getServer().getPluginManager().registerEvents(new OnNPCInteract(), this);
         getServer().getPluginManager().registerEvents(new OnClickInventoryListener(), this);
+        getServer().getPluginManager().registerEvents(new OnPlayerDamage(), this);
 
         CheckTable.checkTables();
         TeamSyncSQL.getAllTeamsFromDB(this);
