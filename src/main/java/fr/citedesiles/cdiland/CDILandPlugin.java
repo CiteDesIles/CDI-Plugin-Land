@@ -16,6 +16,7 @@ import fr.citedesiles.cdiland.runnable.ScoreboardRunnable;
 import fr.citedesiles.cdiland.runnable.SpawnProtectionRunnable;
 import fr.citedesiles.cdiland.runnable.TeamSyncRunnable;
 import fr.citedesiles.cdiland.utils.ConfigManager;
+import fr.citedesiles.cdiland.utils.CustomCraftUtility;
 import fr.citedesiles.cdiland.utils.ScoreboardTeamManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -91,6 +92,9 @@ public class CDILandPlugin extends JavaPlugin {
         objectifManager = new ObjectifManager();
 
         getLogger().info("CDILand plugin enabled");
+
+        CustomCraftUtility customCraftUtility = new CustomCraftUtility();
+        customCraftUtility.registerCustomCrafts();
     }
 
     @Override
