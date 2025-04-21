@@ -17,15 +17,25 @@ public class AdminCommand implements CommandExecutor {
             commandSender.sendMessage("§cVous n'avez pas la permission d'utiliser cette commande.");
             return true;
         }
-        switch (args[0]) {
-            case "startCorrupt":
-                CDILandPlugin.instance().corruptionManager().createCorruption("test", ((Player) commandSender).getLocation(), 10);
+        switch (args[0].toLowerCase()) {
+            case "startcorrupt":
+                CDILandPlugin.instance().corruptionManager().createCorruption("test", ((Player) commandSender).getLocation());
                 break;
-            case "stopCorrupt":
-                CDILandPlugin.instance().corruptionManager().stopCorruption("test");
+            case "stopcorrupt":
+                CDILandPlugin.instance().corruptionManager().getCorruption("test").stopCorruption();
                 break;
-            case "spawnNPC":
+            case "corruptionpause":
+                CDILandPlugin.instance().corruptionManager().getCorruption("test").setPaused(Boolean.parseBoolean(args[1]));
+                break;
+            case "corruptionbpt":
+                CDILandPlugin.instance().corruptionManager().getCorruption("test").setBlocksPerTick(Integer.parseInt(args[1]));
+                break;
+            case "spawnnpc":
                 RegisterNPC.createNPC(((Player) commandSender).getUniqueId(), args[1]);
+                break;
+            default:
+                commandSender.sendMessage("§cUsage: /admin <startcorrupt|stopcorrupt|corruptionspeed|corruptionpause|spawnnpc>");
+                break;
         }
         return true;
     }

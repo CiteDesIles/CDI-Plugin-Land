@@ -25,5 +25,9 @@ public class CustomCraftUtility {
         slimeballrecipe.addIngredient(new ItemStack(Material.ROTTEN_FLESH));
         CDILandPlugin.instance().getServer().addRecipe(slimeballrecipe);
 
+        NamespacedKey oxidizedTrapdoor = new NamespacedKey(CDILandPlugin.instance(), "oxidized_trapdoor");
+        ShapelessRecipe oxidizedTrapdoorRecipe = new ShapelessRecipe(oxidizedTrapdoor, new ItemStack(Material.OXIDIZED_COPPER_TRAPDOOR, 10));
+        oxidizedTrapdoorRecipe.addIngredient(new ItemStack(Material.OXIDIZED_COPPER, 6));
+        CDILandPlugin.instance().getServer().addRecipe(oxidizedTrapdoorRecipe);
     }
 }

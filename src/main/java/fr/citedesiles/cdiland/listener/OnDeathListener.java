@@ -13,11 +13,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 public class OnDeathListener implements Listener {
     @EventHandler
     public void on(PlayerDeathEvent event) {
-        event.setDeathMessage(null);
         Player player = event.getEntity();
-        if(player == null) {
-            return;
-        }
         CDIPlayer cdiPlayer = CDILandPlugin.instance().playerManager().get(player);
         if(cdiPlayer == null) {
             return;

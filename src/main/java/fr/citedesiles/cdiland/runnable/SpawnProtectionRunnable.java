@@ -13,21 +13,16 @@ public class SpawnProtectionRunnable extends BukkitRunnable {
 
     @Override
     public void run() {
-        for(Player player : Bukkit.getOnlinePlayers()) {
-            if(player.isOp()) {
-                continue;
-            }
-            if(player.getLocation().getWorld().getName().equals("world")) {
-                if(player.getGameMode() == GameMode.SURVIVAL || player.getGameMode() == GameMode.ADVENTURE) {
-                    if(player.getLocation().distance(new Location(Bukkit.getWorld("world"), 0, 0, 0)) < 100) {
-                        player.setGameMode(GameMode.ADVENTURE);
-                        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§aVous êtes dans le spawn !"));
-                    } else {
-                        player.setGameMode(GameMode.SURVIVAL);
-                    }
-                }
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (player.isOp()) continue;
+            if (player.getGameMode() != GameMode.SURVIVAL && player.getGameMode() != GameMode.ADVENTURE) continue;
+
+            if (player.getLocation().getWorld().getName().equals("world") && player.getLocation().distance(new Location(Bukkit.getWorld("world"), 0, 0, 0)) < 100) {
+                player.setGameMode(GameMode.ADVENTURE);
+                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§aVous êtes dans le spawn !"));
+            } else {
+                player.setGameMode(GameMode.SURVIVAL);
             }
         }
     }
-    
 }

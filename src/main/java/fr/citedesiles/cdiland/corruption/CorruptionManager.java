@@ -4,7 +4,6 @@ import org.bukkit.Location;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class CorruptionManager {
     List<Corruption> corruptions = new ArrayList<>();
@@ -15,8 +14,8 @@ public class CorruptionManager {
         }
     }
 
-    public void createCorruption(String id, Location location, int speed) {
-        Corruption corruption = new Corruption(id, location, speed);
+    public void createCorruption(String id, Location location) {
+        Corruption corruption = new Corruption(id, location);
         corruption.spawnHeart();
         corruptions.add(corruption);
     }
@@ -30,18 +29,9 @@ public class CorruptionManager {
         return null;
     }
 
-    public void stopCorruption(String id) {
-        Corruption corruption = getCorruption(id);
-        if(corruption != null) {
-            corruption.removeCorruption();
-            corruptions.remove(corruption);
-        }
-    }
-
     public void removeCorruption(String id) {
         Corruption corruption = getCorruption(id);
         if(corruption != null) {
-            corruption.removeCorruption();
             corruptions.remove(corruption);
         }
     }

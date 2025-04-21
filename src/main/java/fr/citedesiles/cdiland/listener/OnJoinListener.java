@@ -64,5 +64,8 @@ public class OnJoinListener implements Listener {
                     new Location(Bukkit.getWorld("world"), 6, 66, 9)
             );
         }
+
+        player.setInvulnerable(true);
+        player.getServer().getScheduler().runTaskLater(plugin, () -> player.setInvulnerable(false), 20 * 5);
     }
 }
