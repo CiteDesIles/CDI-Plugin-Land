@@ -3,6 +3,7 @@ package fr.citedesiles.cdiland.corruption;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Skeleton;
+import org.bukkit.entity.Warden;
 import org.bukkit.entity.Zombie;
 
 public class CorruptionEntities {
@@ -25,7 +26,7 @@ public class CorruptionEntities {
     }
 
     public static void spawnCorruptedWarden(Location location) {
-        Skeleton warden = location.getWorld().spawn(location, Skeleton.class);
+        Warden warden = location.getWorld().spawn(location, Warden.class);
         warden.setCustomName("§1§lWarden corrompu");
         warden.setCustomNameVisible(true);
         warden.getAttribute(Attribute.MAX_HEALTH).setBaseValue(60);

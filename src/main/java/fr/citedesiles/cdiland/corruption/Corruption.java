@@ -131,7 +131,7 @@ public class Corruption {
         //    if(location.getBlock().getType() == Material.AIR && isBlockOnTopOfWorld(location.getBlock())) {
         double random = Math.random();
         if (random < 0.05)
-            CorruptionEntities.spawnCorruptedZombie(location);
+            CorruptionEntities.spawnCorruptedWarden(location);
         else if (random < 0.5)
             CorruptionEntities.spawnCorruptedZombie(location);
         else
