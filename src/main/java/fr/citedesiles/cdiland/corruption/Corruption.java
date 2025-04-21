@@ -19,6 +19,7 @@ import java.util.Set;
 
 public class Corruption {
 
+    private static final int maxEntities = 100;
     private static final List<String> directions = new ArrayList<>();
 
     static {
@@ -30,21 +31,16 @@ public class Corruption {
         directions.add("WEST");
     }
 
-    private int radius;
+    private final String id;
     private final Location center;
-    private final List<CorruptionBlock> corruptionBlocks;
+    private final List<CorruptionBlock> corruptionBlocks = new ArrayList<>();
 
+    private int radius = 0;
     private int blocksPerTick = 10;
-    private static final int maxEntities = 100;
-
+    private boolean isPaused = false;
     private boolean destroyed = false;
 
-    private final String id;
-    private boolean isPaused = false;
-
     public Corruption(String id, Location center) {
-        this.radius = 0;
-        this.corruptionBlocks = new ArrayList<>();
         this.center = center;
         this.id = id;
     }
@@ -151,25 +147,20 @@ public class Corruption {
 
     private void corruptBlock() {
         Block block = getBlockNearARandomCorruptedBlock();
-        if(block != null) {
-            corruptBlock(block);
-            if(isBlockOnTopOfWorld(block)) {
-                double random = Math.random() * 100;
-                if(random < 0.6) {
-                    Block blockU = block.getLocation().add(0, 1, 0).getBlock();
-                    blockU.setType(Material.SCULK_SENSOR);
-                }
-                double random2 = Math.random() * 100;
-                if(random < 0.2) {
-                    Block blockD = block.getLocation().add(0, 1, 0).getBlock();
-                    blockD.setType(Material.SCULK_CATALYST);
-                }
-                double random3 = Math.random() * 100;
-                if(random < 0.1) {
-                    Block blockN = block.getLocation().add(0, 1, 0).getBlock();
-                    blockN.setType(Material.SCULK_SHRIEKER);
-                }
-            }
+        if (block == null) return;
+        corruptBlock(block);
+        if (isBlockOnTopOfWorld(block)) {
+            Block block2 = block.getLocation().add(0, 1, 0).getBlock();
+            CorruptionBlock corruptionBlock = new CorruptionBlock(block2.getType(), block2.getLocation());
+            double random = Math.random() * 100;
+            if (random < 0.1)
+                block2.setType(Material.SCULK_SHRIEKER);
+            else if (random < 0.2)
+                block2.setType(Material.SCULK_CATALYST);
+            else if (random < 0.6)
+                block2.setType(Material.SCULK_SENSOR);
+            else return;
+            corruptionBlocks.add(corruptionBlock);
         }
     }
 
@@ -181,7 +172,6 @@ public class Corruption {
 
     public Block getBlockNearARandomCorruptedBlock() {
         Set<CorruptionBlock> alreadyCheckedBlock = new HashSet<>();
-
         Collections.shuffle(directions);
         while (!corruptionBlocks.isEmpty()) {
 
@@ -193,12 +183,12 @@ public class Corruption {
             for (String direction : directions) {
                 Block block = null;
                 switch (direction) {
-                    case "UP" -> block = corruptionBlock.getLocation().add(0, 1, 0).getBlock();
-                    case "DOWN" -> block = corruptionBlock.getLocation().add(0, -1, 0).getBlock();
-                    case "NORTH" -> block = corruptionBlock.getLocation().add(0, 0, -1).getBlock();
-                    case "SOUTH" -> block = corruptionBlock.getLocation().add(0, 0, 1).getBlock();
-                    case "EAST" -> block = corruptionBlock.getLocation().add(1, 0, 0).getBlock();
-                    case "WEST" -> block = corruptionBlock.getLocation().add(-1, 0, 0).getBlock();
+                    case "UP" -> block = corruptionBlock.getLocation().clone().add(0, 1, 0).getBlock();
+                    case "DOWN" -> block = corruptionBlock.getLocation().clone().add(0, -1, 0).getBlock();
+                    case "NORTH" -> block = corruptionBlock.getLocation().clone().add(0, 0, -1).getBlock();
+                    case "SOUTH" -> block = corruptionBlock.getLocation().clone().add(0, 0, 1).getBlock();
+                    case "EAST" -> block = corruptionBlock.getLocation().clone().add(1, 0, 0).getBlock();
+                    case "WEST" -> block = corruptionBlock.getLocation().clone().add(-1, 0, 0).getBlock();
                 }
                 if (block != null && block.getType() != Material.AIR &&
                         block.getType() != Material.SCULK && block.getType() != Material.SCULK_SENSOR &&
@@ -227,7 +217,7 @@ public class Corruption {
         CDILandPlugin.instance().getServer().getScheduler().runTaskTimer(CDILandPlugin.instance(), (task) -> {
             for(int i = 0; i < blocksPerTick && !corruptionBlocks.isEmpty(); i++) {
                 CorruptionBlock corruptionBlock = corruptionBlocks.removeLast();
-                corruptionBlock.getLocation().getBlock().setType(corruptionBlock.getAncientBlock());
+                if (Math.random() > 0.1) corruptionBlock.getLocation().getBlock().setType(corruptionBlock.getAncientBlock());
                 Block blockU = corruptionBlock.getLocation().add(0, 1, 0).getBlock();
                 if(blockU.getType() == Material.SCULK_SENSOR)
                     blockU.setType(Material.AIR);
