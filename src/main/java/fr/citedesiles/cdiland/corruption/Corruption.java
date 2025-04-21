@@ -19,7 +19,6 @@ import java.util.Set;
 
 public class Corruption {
 
-    private static final int maxEntities = 100;
     private static final List<String> directions = new ArrayList<>();
 
     static {
@@ -96,8 +95,8 @@ public class Corruption {
             corruptBlock();
 
         updateRadius();
-        double random = (Math.random() * 100);
-        if(random < 1)
+
+        if(Math.random() < 0.05)
             spawnMonsters();
 
         int countHeart = 0;
@@ -121,9 +120,8 @@ public class Corruption {
     }
 
     public void spawnMonsters() {
-        if(countEntitiesInCorruption() >= maxEntities) {
+        if(countEntitiesInCorruption() >= radius * 2)
             return;
-        }
         double x = Math.random() * radius * 2 - radius;
         double z = Math.random() * radius * 2 - radius;
         int y = center.getWorld().getHighestBlockYAt(center.clone().add(x, 0, z));
@@ -131,11 +129,13 @@ public class Corruption {
         location.setY(y + 1);
         //if(isInCorruption(location)) {
         //    if(location.getBlock().getType() == Material.AIR && isBlockOnTopOfWorld(location.getBlock())) {
-                if(Math.random() > 0.5) {
-                    CorruptionEntities.spawnCorruptedZombie(location);
-                } else {
-                    CorruptionEntities.spawnCorruptedSkeleton(location);
-                }
+        double random = Math.random();
+        if (random < 0.05)
+            CorruptionEntities.spawnCorruptedZombie(location);
+        else if (random < 0.5)
+            CorruptionEntities.spawnCorruptedZombie(location);
+        else
+            CorruptionEntities.spawnCorruptedSkeleton(location);
           //  }
         //}
     }
