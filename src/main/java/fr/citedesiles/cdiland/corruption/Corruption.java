@@ -12,6 +12,7 @@ import org.bukkit.entity.Zombie;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public class Corruption {
 
@@ -175,7 +176,6 @@ public class Corruption {
 
     public Block getBlockNearARandomCorruptedBlock() {
         List<CorruptionBlock> corruptionBlocks1 = new ArrayList<>(corruptionBlocks);
-        Collections.shuffle(corruptionBlocks1);
         List<String> directions = new ArrayList<>();
         directions.add("UP");
         directions.add("DOWN");
@@ -184,39 +184,27 @@ public class Corruption {
         directions.add("EAST");
         directions.add("WEST");
         Collections.shuffle(directions);
-        for(CorruptionBlock corruptionBlock : corruptionBlocks1) {
-            for(String direction : directions) {
+        while (!corruptionBlocks1.isEmpty()) {
+
+            CorruptionBlock corruptionBlock = corruptionBlocks1.get(new Random().nextInt(corruptionBlocks1.size()));
+            corruptionBlocks1.remove(corruptionBlock);
+
+            for (String direction : directions) {
                 Block block = null;
                 switch (direction) {
-                    case "UP" -> {
-                        block = corruptionBlock.getLocation().add(0, 1, 0).getBlock();
-                    }
-                    case "DOWN" -> {
-                        block = corruptionBlock.getLocation().add(0, -1, 0).getBlock();
-                    }
-                    case "NORTH" -> {
-                        block = corruptionBlock.getLocation().add(0, 0, -1).getBlock();
-                    }
-                    case "SOUTH" -> {
-                        block = corruptionBlock.getLocation().add(0, 0, 1).getBlock();
-                    }
-                    case "EAST" -> {
-                        block = corruptionBlock.getLocation().add(1, 0, 0).getBlock();
-                    }
-                    case "WEST" -> {
-                        block = corruptionBlock.getLocation().add(-1, 0, 0).getBlock();
-                    }
+                    case "UP" -> block = corruptionBlock.getLocation().add(0, 1, 0).getBlock();
+                    case "DOWN" -> block = corruptionBlock.getLocation().add(0, -1, 0).getBlock();
+                    case "NORTH" -> block = corruptionBlock.getLocation().add(0, 0, -1).getBlock();
+                    case "SOUTH" -> block = corruptionBlock.getLocation().add(0, 0, 1).getBlock();
+                    case "EAST" -> block = corruptionBlock.getLocation().add(1, 0, 0).getBlock();
+                    case "WEST" -> block = corruptionBlock.getLocation().add(-1, 0, 0).getBlock();
                 }
-                if(block == null) {
-                    continue;
-                }
-                if(block.getType() != Material.AIR &&
-                    !block.getType().toString().contains("SCULK") &&
-                    !block.getType().toString().contains("BEDROCK") &&
-                    !block.getType().toString().contains("OBSIDIAN"))
-                {
-                        return block;
-                }
+                if (block != null && block.getType() != Material.AIR &&
+                        block.getType() != Material.SCULK && block.getType() != Material.SCULK_SENSOR &&
+                        block.getType() != Material.SCULK_CATALYST && block.getType() != Material.SCULK_SHRIEKER &&
+                        block.getType() != Material.BEDROCK &&
+                        block.getType() != Material.OBSIDIAN && block.getType() != Material.CRYING_OBSIDIAN)
+                    return block;
             }
         }
         return null;
