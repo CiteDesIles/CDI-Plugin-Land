@@ -29,9 +29,9 @@ public class CorruptionEntities {
         Warden warden = location.getWorld().spawn(location, Warden.class);
         warden.setCustomName("§1§lWarden corrompu");
         warden.setCustomNameVisible(true);
-        warden.getAttribute(Attribute.MAX_HEALTH).setBaseValue(60);
+        warden.getAttribute(Attribute.MAX_HEALTH).setBaseValue(100);
         warden.getAttribute(Attribute.SCALE).setBaseValue(1.5);
-        warden.getAttribute(Attribute.ATTACK_DAMAGE).setBaseValue(2);
-        warden.setHealth(60);
+        warden.getAttribute(Attribute.ATTACK_DAMAGE).setBaseValue(4);
+        warden.setHealth(100);
     }
 }

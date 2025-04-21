@@ -120,7 +120,7 @@ public class Corruption {
     }
 
     public void spawnMonsters() {
-        if(countEntitiesInCorruption() >= radius * 2)
+        if(countEntitiesInCorruption() >= radius * 1.3)
             return;
         double x = Math.random() * radius * 2 - radius;
         double z = Math.random() * radius * 2 - radius;
@@ -129,10 +129,10 @@ public class Corruption {
         location.setY(y + 1);
         //if(isInCorruption(location)) {
         //    if(location.getBlock().getType() == Material.AIR && isBlockOnTopOfWorld(location.getBlock())) {
-        double random = Math.random();
-        if (random < 0.05)
+        double random = Math.random() * 100;
+        if (random < 1)
             CorruptionEntities.spawnCorruptedWarden(location);
-        else if (random < 0.5)
+        else if (random < 50)
             CorruptionEntities.spawnCorruptedZombie(location);
         else
             CorruptionEntities.spawnCorruptedSkeleton(location);
@@ -153,11 +153,11 @@ public class Corruption {
             Block block2 = block.getLocation().add(0, 1, 0).getBlock();
             CorruptionBlock corruptionBlock = new CorruptionBlock(block2.getType(), block2.getLocation());
             double random = Math.random() * 100;
-            if (random < 0.1)
+            if (random < 0.4)
                 block2.setType(Material.SCULK_SHRIEKER);
-            else if (random < 0.2)
+            else if (random < 0.8)
                 block2.setType(Material.SCULK_CATALYST);
-            else if (random < 0.6)
+            else if (random < 2)
                 block2.setType(Material.SCULK_SENSOR);
             else return;
             corruptionBlocks.add(corruptionBlock);
