@@ -31,10 +31,8 @@ public class Corruption {
     }
 
     private int radius;
-    private int speed = 1;
     private final Location center;
     private final List<CorruptionBlock> corruptionBlocks;
-    private int currentTickToNextBlock = 0;
 
     private int blocksPerTick = 10;
     private static final int maxEntities = 100;
@@ -53,7 +51,7 @@ public class Corruption {
 
     public void spawnHeart() {
 
-        Bukkit.getWorld("world").setTime(13000);
+        Bukkit.getWorld("world").setTime(18000);
         Bukkit.getWorld("world").setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
 
         // Sphère en obsidienne de 3 de rayons --> Coeur de la corruption
@@ -86,10 +84,6 @@ public class Corruption {
         this.radius = 10;
     }
 
-    public void setSpeed(int speed) {
-        this.speed = speed;
-    }
-
     public void setPaused(boolean paused) {
         this.isPaused = paused;
     }
@@ -99,20 +93,16 @@ public class Corruption {
     }
 
     public void tick() {
-        if (isPaused)
+        if (isPaused || destroyed)
             return;
-        if(currentTickToNextBlock < speed) {
-            currentTickToNextBlock++;
-            return;
-        }
-        currentTickToNextBlock = 0;
+
         for(int i = 0; i < blocksPerTick; i++)
             corruptBlock();
+
         updateRadius();
         double random = (Math.random() * 100);
-        if(random < 10) {
+        if(random < 1)
             spawnMonsters();
-        }
 
         int countHeart = 0;
         for(int x = -3; x <= 3; x++) {
@@ -129,12 +119,8 @@ public class Corruption {
             }
         }
         if(countHeart == 0) {
-            if(destroyed) {
-                return;
-            }
             Bukkit.broadcastMessage("§aLa corruption a été vaincue !");
-            CDILandPlugin.instance().corruptionManager().removeCorruption(this.id);
-            destroyed = true;
+            stopCorruption();
         }
     }
 
@@ -233,24 +219,14 @@ public class Corruption {
         return (location.distance(center) <= radius);
     }
 
-    public void removeCorruption() {
-        speed = 5;
+    public void stopCorruption() {
+        destroyed = true;
+        blocksPerTick /= 5;
         Bukkit.getWorld("world").setTime(1000);
         Bukkit.getWorld("world").setGameRule(GameRule.DO_DAYLIGHT_CYCLE, true);
         CDILandPlugin.instance().getServer().getScheduler().runTaskTimer(CDILandPlugin.instance(), (task) -> {
-            if(currentTickToNextBlock < speed) {
-                currentTickToNextBlock++;
-                return;
-            }
-            if(corruptionBlocks.isEmpty()) {
-                CDILandPlugin.instance().corruptionManager().removeCorruption(id);
-                task.cancel();
-            }
-            for(int i = 0; i < blocksPerTick; i++) {
-                if(corruptionBlocks.isEmpty())
-                    break;
-                CorruptionBlock corruptionBlock = corruptionBlocks.getLast();
-                corruptionBlocks.remove(corruptionBlock);
+            for(int i = 0; i < blocksPerTick && !corruptionBlocks.isEmpty(); i++) {
+                CorruptionBlock corruptionBlock = corruptionBlocks.removeLast();
                 corruptionBlock.getLocation().getBlock().setType(corruptionBlock.getAncientBlock());
                 Block blockU = corruptionBlock.getLocation().add(0, 1, 0).getBlock();
                 if(blockU.getType() == Material.SCULK_SENSOR)
@@ -258,7 +234,11 @@ public class Corruption {
                 if(blockU.getType() == Material.SCULK_CATALYST)
                     blockU.setType(Material.AIR);
             }
-        }, 0, 0);
+            if(corruptionBlocks.isEmpty()) {
+                CDILandPlugin.instance().corruptionManager().removeCorruption(id);
+                task.cancel();
+            }
+        }, 1, 1);
     }
 
     public int countEntitiesInCorruption() {

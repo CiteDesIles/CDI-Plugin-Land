@@ -22,15 +22,12 @@ public class AdminCommand implements CommandExecutor {
                 CDILandPlugin.instance().corruptionManager().createCorruption("test", ((Player) commandSender).getLocation());
                 break;
             case "stopcorrupt":
-                CDILandPlugin.instance().corruptionManager().stopCorruption("test");
-                break;
-            case "corruptionspeed":
-                CDILandPlugin.instance().corruptionManager().getCorruption("test").setSpeed(Integer.parseInt(args[1]));
+                CDILandPlugin.instance().corruptionManager().getCorruption("test").stopCorruption();
                 break;
             case "corruptionpause":
                 CDILandPlugin.instance().corruptionManager().getCorruption("test").setPaused(Boolean.parseBoolean(args[1]));
                 break;
-            case "corruptionbps":
+            case "corruptionbpt":
                 CDILandPlugin.instance().corruptionManager().getCorruption("test").setBlocksPerTick(Integer.parseInt(args[1]));
                 break;
             case "spawnnpc":
