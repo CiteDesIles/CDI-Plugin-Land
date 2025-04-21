@@ -15,8 +15,8 @@ public class CorruptionManager {
         }
     }
 
-    public void createCorruption(String id, Location location, int speed) {
-        Corruption corruption = new Corruption(id, location, speed);
+    public void createCorruption(String id, Location location) {
+        Corruption corruption = new Corruption(id, location);
         corruption.spawnHeart();
         corruptions.add(corruption);
     }

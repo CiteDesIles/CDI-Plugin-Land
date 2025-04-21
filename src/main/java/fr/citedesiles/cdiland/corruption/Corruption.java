@@ -2,6 +2,7 @@ package fr.citedesiles.cdiland.corruption;
 
 import fr.citedesiles.cdiland.CDILandPlugin;
 import org.bukkit.Bukkit;
+import org.bukkit.GameRule;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -11,36 +12,50 @@ import org.bukkit.entity.Zombie;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 public class Corruption {
 
-    public final static Material CORRUPTED_BLOCK = Material.SCULK;
+    private static final List<String> directions = new ArrayList<>();
+
+    static {
+        directions.add("UP");
+        directions.add("DOWN");
+        directions.add("NORTH");
+        directions.add("SOUTH");
+        directions.add("EAST");
+        directions.add("WEST");
+    }
 
     private int radius;
-    private int speed;
-    private Location center;
-    private List<CorruptionBlock> corruptionBlocks;
-
+    private int speed = 1;
+    private final Location center;
+    private final List<CorruptionBlock> corruptionBlocks;
     private int currentTickToNextBlock = 0;
-    private final int removeBlockPerTick = 100;
-    private final int corruptionBlockPerTick = 100;
-    private final int maxEntities = 100;
+
+    private int blocksPerTick = 10;
+    private static final int maxEntities = 100;
 
     private boolean destroyed = false;
 
-    String id;
+    private final String id;
+    private boolean isPaused = false;
 
-    public Corruption(String id, Location center, int speed) {
+    public Corruption(String id, Location center) {
         this.radius = 0;
-        this.speed = speed;
         this.corruptionBlocks = new ArrayList<>();
         this.center = center;
         this.id = id;
     }
 
     public void spawnHeart() {
+
+        Bukkit.getWorld("world").setTime(13000);
+        Bukkit.getWorld("world").setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
+
         // Sphère en obsidienne de 3 de rayons --> Coeur de la corruption
         for(int x = -3; x <= 3; x++) {
             for(int y = -3; y <= 3; y++) {
@@ -62,9 +77,7 @@ public class Corruption {
                     if(location.distance(center) <= 8) {
                         Block block = location.getBlock();
                         if(block.getType() != Material.AIR && block.getType() != Material.BEDROCK && block.getType() != Material.OBSIDIAN) {
-                            CorruptionBlock corruptionBlock = new CorruptionBlock(block.getType(), location);
-                            corruptionBlocks.add(corruptionBlock);
-                            block.setType(CORRUPTED_BLOCK);
+                            corruptBlock(block);
                         }
                     }
                 }
@@ -73,15 +86,28 @@ public class Corruption {
         this.radius = 10;
     }
 
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
+
+    public void setPaused(boolean paused) {
+        this.isPaused = paused;
+    }
+
+    public void setBlocksPerTick(int blocksPerTick) {
+        this.blocksPerTick = blocksPerTick;
+    }
+
     public void tick() {
+        if (isPaused)
+            return;
         if(currentTickToNextBlock < speed) {
             currentTickToNextBlock++;
             return;
         }
         currentTickToNextBlock = 0;
-        for(int i = 0; i < corruptionBlockPerTick; i++) {
+        for(int i = 0; i < blocksPerTick; i++)
             corruptBlock();
-        }
         updateRadius();
         double random = (Math.random() * 100);
         if(random < 10) {
@@ -133,21 +159,14 @@ public class Corruption {
     }
 
     public void updateRadius() {
-        int distance = 0;
-        for(CorruptionBlock corruptionBlock : corruptionBlocks) {
-            if(corruptionBlock.getLocation().distance(center) > distance) {
-                distance = (int) corruptionBlock.getLocation().distance(center);
-            }
-        }
-        this.radius = distance -2;
+        if (corruptionBlocks.isEmpty()) return;
+        this.radius = (int) corruptionBlocks.getLast().getLocation().distance(center);
     }
 
     private void corruptBlock() {
         Block block = getBlockNearARandomCorruptedBlock();
         if(block != null) {
-            CorruptionBlock corruptionBlock = new CorruptionBlock(block.getType(), block.getLocation());
-            corruptionBlocks.add(corruptionBlock);
-            block.setType(CORRUPTED_BLOCK);
+            corruptBlock(block);
             if(isBlockOnTopOfWorld(block)) {
                 double random = Math.random() * 100;
                 if(random < 0.6) {
@@ -171,23 +190,19 @@ public class Corruption {
     private void corruptBlock(Block block) {
         CorruptionBlock corruptionBlock = new CorruptionBlock(block.getType(), block.getLocation());
         corruptionBlocks.add(corruptionBlock);
-        block.setType(CORRUPTED_BLOCK);
+        block.setType(Material.SCULK);
     }
 
     public Block getBlockNearARandomCorruptedBlock() {
-        List<CorruptionBlock> corruptionBlocks1 = new ArrayList<>(corruptionBlocks);
-        List<String> directions = new ArrayList<>();
-        directions.add("UP");
-        directions.add("DOWN");
-        directions.add("NORTH");
-        directions.add("SOUTH");
-        directions.add("EAST");
-        directions.add("WEST");
-        Collections.shuffle(directions);
-        while (!corruptionBlocks1.isEmpty()) {
+        Set<CorruptionBlock> alreadyCheckedBlock = new HashSet<>();
 
-            CorruptionBlock corruptionBlock = corruptionBlocks1.get(new Random().nextInt(corruptionBlocks1.size()));
-            corruptionBlocks1.remove(corruptionBlock);
+        Collections.shuffle(directions);
+        while (!corruptionBlocks.isEmpty()) {
+
+            CorruptionBlock corruptionBlock = corruptionBlocks.get(new Random().nextInt(corruptionBlocks.size()));
+            if (alreadyCheckedBlock.contains(corruptionBlock))
+                continue;
+            alreadyCheckedBlock.add(corruptionBlock);
 
             for (String direction : directions) {
                 Block block = null;
@@ -219,27 +234,31 @@ public class Corruption {
     }
 
     public void removeCorruption() {
+        speed = 5;
+        Bukkit.getWorld("world").setTime(1000);
+        Bukkit.getWorld("world").setGameRule(GameRule.DO_DAYLIGHT_CYCLE, true);
         CDILandPlugin.instance().getServer().getScheduler().runTaskTimer(CDILandPlugin.instance(), (task) -> {
+            if(currentTickToNextBlock < speed) {
+                currentTickToNextBlock++;
+                return;
+            }
             if(corruptionBlocks.isEmpty()) {
                 CDILandPlugin.instance().corruptionManager().removeCorruption(id);
                 task.cancel();
             }
-            for(int i = 0; i < removeBlockPerTick; i++) {
-                if(corruptionBlocks.isEmpty()) {
+            for(int i = 0; i < blocksPerTick; i++) {
+                if(corruptionBlocks.isEmpty())
                     break;
-                }
-                CorruptionBlock corruptionBlock = corruptionBlocks.get(corruptionBlocks.size()-1);
+                CorruptionBlock corruptionBlock = corruptionBlocks.getLast();
                 corruptionBlocks.remove(corruptionBlock);
                 corruptionBlock.getLocation().getBlock().setType(corruptionBlock.getAncientBlock());
                 Block blockU = corruptionBlock.getLocation().add(0, 1, 0).getBlock();
-                if(blockU.getType() == Material.SCULK_SENSOR) {
+                if(blockU.getType() == Material.SCULK_SENSOR)
                     blockU.setType(Material.AIR);
-                }
-                if(blockU.getType() == Material.SCULK_CATALYST) {
+                if(blockU.getType() == Material.SCULK_CATALYST)
                     blockU.setType(Material.AIR);
-                }
             }
-        }, 0, 5);
+        }, 0, 0);
     }
 
     public int countEntitiesInCorruption() {
