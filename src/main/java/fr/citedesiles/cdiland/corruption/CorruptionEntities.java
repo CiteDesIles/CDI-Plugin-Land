@@ -23,4 +23,14 @@ public class CorruptionEntities {
         skeleton.getAttribute(Attribute.GENERIC_SCALE).setBaseValue(1.5);
         skeleton.setHealth(40);
     }
+
+    public static void spawnCorruptedWarden(Location location) {
+        Skeleton warden = location.getWorld().spawn(location, Skeleton.class);
+        warden.setCustomName("§1§lWarden corrompu");
+        warden.setCustomNameVisible(true);
+        warden.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(60);
+        warden.getAttribute(Attribute.GENERIC_SCALE).setBaseValue(1.5);
+        warden.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(2);
+        warden.setHealth(60);
+    }
 }
