@@ -29,6 +29,10 @@ public class CorruptionManager {
         return null;
     }
 
+    public Corruption getCorruption() {
+        return getCorruption("test");
+    }
+
     public void removeCorruption(String id) {
         Corruption corruption = getCorruption(id);
         if(corruption != null) {
