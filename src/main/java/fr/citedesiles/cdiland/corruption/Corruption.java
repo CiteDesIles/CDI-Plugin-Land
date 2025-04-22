@@ -96,7 +96,7 @@ public class Corruption {
 
         updateRadius();
 
-        if(Math.random() < 0.05)
+        if(Math.random() < 0.2)
             spawnMonsters();
 
         int countHeart = 0;

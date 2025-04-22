@@ -1,6 +1,7 @@
 package fr.citedesiles.cdiland.commands;
 
 import fr.citedesiles.cdiland.CDILandPlugin;
+import fr.citedesiles.cdiland.corruption.CorruptionEntities;
 import fr.citedesiles.cdiland.npc.RegisterNPC;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -32,6 +33,9 @@ public class AdminCommand implements CommandExecutor {
                 break;
             case "spawnnpc":
                 RegisterNPC.createNPC(((Player) commandSender).getUniqueId(), args[1]);
+                break;
+            case "spawnwarden":
+                CorruptionEntities.spawnCorruptedWarden(((Player) commandSender).getLocation());
                 break;
             default:
                 commandSender.sendMessage("§cUsage: /admin <startcorrupt|stopcorrupt|corruptionspeed|corruptionpause|spawnnpc>");
