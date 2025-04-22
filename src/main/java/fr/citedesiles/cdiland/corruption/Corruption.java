@@ -12,10 +12,8 @@ import org.bukkit.entity.Zombie;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 public class Corruption {
 
@@ -33,6 +31,7 @@ public class Corruption {
     private final String id;
     private final Location center;
     private final List<CorruptionBlock> corruptionBlocks = new ArrayList<>();
+    private final List<CorruptionBlock> canPropagateBlocks = new ArrayList<>();
 
     private int radius = 0;
     private int blocksPerTick = 10;
@@ -91,7 +90,9 @@ public class Corruption {
         if (isPaused || destroyed)
             return;
 
-        for(int i = 0; i < blocksPerTick; i++)
+        Collections.shuffle(directions);
+
+        for (int i = 0; i < blocksPerTick; i++)
             corruptBlock();
 
         updateRadius();
@@ -167,18 +168,15 @@ public class Corruption {
     private void corruptBlock(Block block) {
         CorruptionBlock corruptionBlock = new CorruptionBlock(block.getType(), block.getLocation());
         corruptionBlocks.add(corruptionBlock);
+        canPropagateBlocks.add(corruptionBlock);
         block.setType(Material.SCULK);
     }
 
     public Block getBlockNearARandomCorruptedBlock() {
-        Set<CorruptionBlock> alreadyCheckedBlock = new HashSet<>();
-        Collections.shuffle(directions);
-        while (!corruptionBlocks.isEmpty()) {
+        while (!canPropagateBlocks.isEmpty()) {
 
-            CorruptionBlock corruptionBlock = corruptionBlocks.get(new Random().nextInt(corruptionBlocks.size()));
-            if (alreadyCheckedBlock.contains(corruptionBlock))
-                continue;
-            alreadyCheckedBlock.add(corruptionBlock);
+            int i = new Random().nextInt(canPropagateBlocks.size());
+            CorruptionBlock corruptionBlock = canPropagateBlocks.get(i);
 
             for (String direction : directions) {
                 Block block = null;
@@ -197,6 +195,9 @@ public class Corruption {
                         block.getType() != Material.OBSIDIAN && block.getType() != Material.CRYING_OBSIDIAN)
                     return block;
             }
+
+            Collections.swap(canPropagateBlocks, i, canPropagateBlocks.size() - 1);
+            canPropagateBlocks.removeLast();
         }
         return null;
     }
