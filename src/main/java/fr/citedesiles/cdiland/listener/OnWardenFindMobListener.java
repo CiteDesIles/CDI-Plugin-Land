@@ -11,7 +11,7 @@ import org.bukkit.event.entity.EntityTargetEvent;
 public class OnWardenFindMobListener implements Listener {
     @EventHandler
     public void on(EntityTargetEvent event) {
-        if (event.getTarget() instanceof Player) return;
+        if (event.getTarget() == null || event.getTarget() instanceof Player) return;
         Corruption corruption = CDILandPlugin.instance().corruptionManager().getCorruption();
         if (corruption != null && corruption.isInCorruption(event.getEntity().getLocation())) event.setCancelled(true);
     }
