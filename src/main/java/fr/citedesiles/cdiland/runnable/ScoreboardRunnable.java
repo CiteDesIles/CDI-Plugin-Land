@@ -42,11 +42,10 @@ public class ScoreboardRunnable extends BukkitRunnable {
                 Component.text(cdiTeam.getDisplayName()).color(NamedTextColor.YELLOW),
                 Component.text(""),
                 Component.text("Stats :").color(NamedTextColor.WHITE),
-                Component.text(cdiTeam.getMoney() + " G").color(NamedTextColor.YELLOW).decorate(TextDecoration.BOLD),
-                Component.text(cdiTeam.getSupportPoints() + " SP").color(NamedTextColor.AQUA).decorate(TextDecoration.BOLD),
+                Component.text("? G").color(NamedTextColor.YELLOW).decorate(TextDecoration.BOLD),
+                Component.text("? SP").color(NamedTextColor.AQUA).decorate(TextDecoration.BOLD),
                 Component.text(""),
-                Component.text("Position: ").color(NamedTextColor.WHITE)
-                    .append(Component.text(plugin.teamManager().position(cdiTeam)).color(NamedTextColor.RED))
+                Component.text("Position: §c?").color(NamedTextColor.WHITE)
             );
         }
 
